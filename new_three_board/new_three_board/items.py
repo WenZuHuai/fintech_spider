@@ -28,11 +28,8 @@ class NewThreeBoardItem(scrapy.Item):
     """
 
     # Spider("neeq")
-    com_code = scrapy.Field()   # xxzqdm 证券代码
-    com_name = scrapy.Field()
-    com_abbr_name = scrapy.Field()   # xxzqjc 证券简称
-    type_of_transfer = scrapy.Field()  # xxzrlx 转让类型
-    com_industry = scrapy.Field()   # xxhyzl 所属行业
-    zbqs = scrapy.Field()   # xxzbqs 主办券商
-    region = scrapy.Field()   # xxssdq 地区
-
+    basic_info = scrapy.Field()   # 公司概况
+    #stamp = scrapy.Field()
+    finance = scrapy.Field()   # 财务指标
+    top_ten_holders = scrapy.Field()  # 十大股东
+    executives = scrapy.Field()   # 高管人员

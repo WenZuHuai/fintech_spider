@@ -7,4 +7,5 @@
 from scrapy import cmdline
 
 # cmdline.execute(["scrapy", "crawl", "new_three_board", "-L", "WARNING"])
-cmdline.execute(["scrapy", "crawl", "neeq_com_code", "-L", "WARNING"])
+cmdline.execute(["scrapy", "crawl", "neeq", "-L", "WARNING"])
+
