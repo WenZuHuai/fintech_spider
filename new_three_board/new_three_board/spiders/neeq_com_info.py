@@ -44,8 +44,9 @@ class NewThreeBoard(scrapy.Spider):
     def parse_details(self, response):
         detail_dict = json.loads(response.body[5:-1])
         ntbi = items.NewThreeBoardItem()
-        ntbi["basic_info"] = detail_dict.get("basic_info", {})    # 公司概况
+        ntbi["basic_info"] = detail_dict.get("baseinfo", {})    # 公司概况
         ntbi["finance"] = detail_dict.get("finance", {})   # 财务指标
-        ntbi["top_ten_holders"] = detail_dict.get("top_ten_holders", {})   # 十大股东
+        ntbi["top_ten_holders"] = detail_dict.get("topTenHolders", {})   # 十大股东
         ntbi["executives"] = detail_dict.get("executives", {})    # 高管人员
-        yield ntbi
+        # yield ntbi    # 这儿要是去掉注释就会插入到mongo中,注意不要去掉注释.
+
