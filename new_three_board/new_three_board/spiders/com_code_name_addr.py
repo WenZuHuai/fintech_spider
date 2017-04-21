@@ -11,6 +11,7 @@ from new_three_board import items
 class NewThreeBoard(scrapy.Spider):
     """
     新三板在线(http://www.chinaipo.com/listed)
+    由于该网站上没有公司的全称数据，所以舍弃该网站的爬取
     """
     name = "new_three_board"
 
@@ -36,8 +37,5 @@ class NewThreeBoard(scrapy.Spider):
             except Exception as e:
                 print("lxw_AssertError: {0}. len(field_list) != len(content)".format(content[0]))
 
-            #yield ntbi
-            #break
-
-
-
+            # yield ntbi
+            # break
