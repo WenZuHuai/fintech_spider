@@ -6,6 +6,7 @@
 
 import requests
 from requests.exceptions import ConnectionError
+from redis_IP_proxy.settings import TEST_API
 
 base_headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36',
@@ -25,3 +26,13 @@ def get_page(url, options={}):
     except ConnectionError:
         print('Crawling Failed', url)
         return None
+
+
+def check_proxy_alive(proxy):
+    try:
+        proxies = {"http": proxy}
+        req = requests.get(TEST_API, proxies=proxies, timeout=(5, 30))
+        return req.status_code == 200
+    except Exception as e:
+        print("Bad Proxy", e)
+        return False

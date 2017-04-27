@@ -4,35 +4,47 @@
 # Author: lxw
 # Date: 4/26/17 2:56 PM
 
+import redis
 import scrapy
 
+from redis_IP_proxy.proxy_interface import RedisClient
+from redis_IP_proxy.utils import check_proxy_alive
 
-class FreeProxiesSpider(scrapy.Spider):
 
+class Daili66Spider(scrapy.Spider):
     name = "daili66_spider"
     page_count = 0
-    proxy_dict = {}
+    proxy_db = RedisClient()
     start_urls = ["http://www.66ip.cn/index.html"]
 
     def parse(self, response):
         table = response.xpath('//table')[2]
         ip_list = table.xpath('./tr/td[1]/text()').extract()[1:]
         port_list = table.xpath('./tr/td[2]/text()').extract()[1:]
-        # print(dict(ip_list, port_list)) # no
-        # yield(dict(zip(ip_list, port_list)))
         for ip, port in zip(ip_list, port_list):
-            self.proxy_dict[ip] = port
+            proxy = "{0}:{1}".format(ip, port)
+            if check_proxy_alive(proxy):
+                self.proxy_db.put(proxy)
 
         next_page = response.xpath('//div[@id="PageList"]/a')
         next_page = next_page.xpath("./@href").extract()[-1]
         next_page = "http://www.66ip.cn" + next_page if "http" not in next_page else next_page
-        # print(self.page_count)  # OK
+
         self.page_count += 1
-        if self.page_count < 1: # only crawl proxies on top 4 pages
+        if self.page_count < 4:    # only crawl proxies on top 4 pages
             yield scrapy.Request(url=next_page, callback=self.parse)
+
+            """
         else:
-            print(self.proxy_dict)
-            yield self.proxy_dict
+            # zset
+            print(self.proxy_list)
+
+            for proxy in self.proxy_list:
+                conn.zadd("proxy_zset", proxy, self._INITIAL_SCORE)
+            print(conn.zcard("proxy_zset"))  # total count
+            print(conn.zrange("proxy_zset", 0, 100, withscores=True))
+            """
+
 
     """
     def get_raw_proxies(self, callback):
@@ -88,3 +100,4 @@ class FreeProxiesSpider(scrapy.Spider):
             for result in results:
                 if result: yield result.strip()
     """
+
