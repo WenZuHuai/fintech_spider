@@ -26,9 +26,8 @@ class Daili66Spider(scrapy.Spider):
         for ip, port in zip(ip_list, port_list):
             proxy = "{0}:{1}".format(ip, port)
             if check_proxy_alive(proxy):
-                # self.proxy_db.put(proxy)
+                self.proxy_db.put(proxy)
                 print(proxy)
-                # pass
 
         self.page_count += 1
         if self.page_count < 4:    # only crawl proxies on top 3 pages
