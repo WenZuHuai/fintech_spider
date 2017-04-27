@@ -2,3 +2,4 @@
 **/__pycache__/
 new_three_board/new_three_board/spiders/com_code.json
 **/*.log
+localTest/
