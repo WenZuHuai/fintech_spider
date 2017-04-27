@@ -30,9 +30,10 @@ def get_page(url, options={}):
 
 def check_proxy_alive(proxy):
     try:
-        proxies = {"http": proxy}
-        req = requests.get(TEST_API, proxies=proxies, timeout=(5, 30))
+        proxies = {"http": proxy, "https": proxy}   # NOTE: 这里"http"和"https"一定要都写，不能只写http或者是只写https
+        # req = requests.get(TEST_API, proxies=proxies, timeout=(5, 30))
+        req = requests.get(TEST_API, proxies=proxies, timeout=3)
         return req.status_code == 200
     except Exception as e:
-        print("Bad Proxy", e)
+        # print("Bad Proxy", proxy)
         return False

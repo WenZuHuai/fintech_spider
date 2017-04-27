@@ -9,7 +9,8 @@ HOST = "localhost"
 PORT = 6379
 
 # 测试API，用百度来测试
-TEST_API = "https://www.baidu.com/"
+# TEST_API = "https://www.baidu.com/"
+TEST_API = "http://www.baidu.com/"
 
 # 如果Redis有密码，则添加这句密码，否则设置为None
 # PASSWORD = 'foobared'

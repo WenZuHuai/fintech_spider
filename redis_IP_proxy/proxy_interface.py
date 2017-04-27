@@ -35,14 +35,15 @@ class RedisClient():
         try:
             for index in range(count):
                 index = random.randint(0, self.queue_len-1)
-                proxies.append(self._db.lindex("proxy_list", index))
+                proxies.append(self._db.lindex("proxy_list", index).decode("utf-8"))
             # proxies = self._db.lrange("proxy_list", 0, count-1)
             # self._db.ltrim("proxy_list", count, -1)    # 移除列表内没有在该索引之内的值
         except ValueError as ve:
             print("queue_len is too short(<1)", ve)
         except Exception as e:
-            print("lxw:Unexpected Error")
+            print("lxw:Unexpected Error", e)
         finally:
+            print("Using proxies:", proxies)
             return proxies
 
     def put(self, proxy):
@@ -60,7 +61,7 @@ class RedisClient():
         # list
         try:
             # 移除列表的右侧第一个元素，并返回值右侧第一个元素
-            return self._db.rpop("proxy_list")  # .decode('utf-8')  #no need
+            return self._db.rpop("proxy_list").decode('utf-8')  # return unicode('str' in Python3)
         except:
             raise PoolEmptyError
 
