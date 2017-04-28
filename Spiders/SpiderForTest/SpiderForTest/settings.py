@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for localTest project
+# Scrapy settings for SpiderForTest project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,14 +9,14 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'localTest'
+BOT_NAME = 'SpiderForTest'
 
-SPIDER_MODULES = ['localTest.spiders']
-NEWSPIDER_MODULE = 'localTest.spiders'
+SPIDER_MODULES = ['SpiderForTest.spiders']
+NEWSPIDER_MODULE = 'SpiderForTest.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'localTest (+http://www.yourdomain.com)'
+#USER_AGENT = 'SpiderForTest (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -47,7 +47,7 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'localTest.middlewares.LocaltestSpiderMiddleware': 543,
+#    'SpiderForTest.middlewares.LocaltestSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
@@ -56,12 +56,12 @@ DOWNLOADER_MIDDLEWARES = {
 
     # User-Agent
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'localTest.middlewares.RotateUserAgentMiddleware': 543,
+    'SpiderForTest.middlewares.RotateUserAgentMiddleware': 543,
 
     # Proxy
     'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
     # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'localTest.middlewares.ProxyMiddleware': 100,
+    'SpiderForTest.middlewares.ProxyMiddleware': 100,
 }
 
 # Enable or disable extensions
@@ -73,7 +73,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'localTest.pipelines.LocaltestPipeline': 300,
+#    'SpiderForTest.pipelines.LocaltestPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
