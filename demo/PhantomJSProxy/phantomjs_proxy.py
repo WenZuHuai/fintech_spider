@@ -6,6 +6,7 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.proxy import ProxyType
+from redis_IP_proxy.proxy_interface import RedisClient
 
 
 def main():
@@ -19,9 +20,12 @@ def main():
     print("----"*10, "\n")
 
     # 利用DesiredCapabilities(代理设置)参数值，重新打开一个sessionId，我看意思就相当于浏览器清空缓存后，加上代理重新访问一次url
+    redis_client = RedisClient()
     proxy = webdriver.Proxy()
     proxy.proxy_type = ProxyType.MANUAL
-    proxy.http_proxy = '1.9.171.51:800'
+    proxy_list = redis_client.get()
+    if proxy_list:
+        proxy.http_proxy = proxy_list[0]    # '1.9.171.51:800'
     # 将代理设置添加到webdriver.DesiredCapabilities.PHANTOMJS中
     proxy.add_to_capabilities(webdriver.DesiredCapabilities.PHANTOMJS)
     browser.start_session(webdriver.DesiredCapabilities.PHANTOMJS)
