@@ -13,11 +13,10 @@ from redis_IP_proxy.utils import check_proxy_alive
 
 class Daili66Spider(scrapy.Spider):
     name = "daili66_spider"
-    page_count = 1
+    current_page = "index.html"
     proxy_db = RedisClient()
     # start_urls = ["http://www.66ip.cn/index.html"]    # 这个页面的代理时国外的不稳定，太慢
-    page_str = "http://www.66ip.cn/areaindex_1/{0}.html"
-    start_urls = [page_str.format(page_count)]
+    start_urls = ["http://www.66ip.cn/areaindex_1/index.html"]
 
     def parse(self, response):
         table = response.xpath('//table')[2]
@@ -26,13 +25,20 @@ class Daili66Spider(scrapy.Spider):
         for ip, port in zip(ip_list, port_list):
             proxy = "{0}:{1}".format(ip, port)
             if check_proxy_alive(proxy):
-                self.proxy_db.put(proxy)
+                Daili66Spider.proxy_db.put(proxy)
                 print(proxy)
 
-        self.page_count += 1
-        if self.page_count < 4:    # only crawl proxies on top 3 pages
-            print("Crawling page {0}".format(self.page_count))
-            yield scrapy.Request(url=self.page_str.format(self.page_count), callback=self.parse)
+        if Daili66Spider.proxy_db.queue_len > 50:
+            return
+
+        next_page = response.css("#PageList .pageCurrent").xpath("following-sibling::a").css("::attr(href)").extract_first()
+        print("Next_page:", next_page)
+        # if next_page == Daili66Spider.current_page:   # NO
+        if ".html" not in next_page:
+            return
+
+        print("Current page {0} is crawled successfully.".format(Daili66Spider.current_page))
+        yield scrapy.Request(url="http://www.66ip.cn"+next_page, callback=self.parse)
 
         """
         next_page = response.xpath('//div[@id="PageList"]/a')

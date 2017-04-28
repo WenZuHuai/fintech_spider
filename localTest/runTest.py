@@ -8,3 +8,4 @@ from scrapy import cmdline
 
 
 cmdline.execute("scrapy crawl ProxyPoolTest_spider -L WARNING".split())
+

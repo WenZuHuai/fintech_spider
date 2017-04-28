@@ -9,6 +9,7 @@ import redis
 
 from redis_IP_proxy.error import PoolEmptyError
 from redis_IP_proxy.settings import HOST, PORT
+from redis_IP_proxy.utils import check_proxy_alive
 
 
 class RedisClient():
@@ -32,19 +33,39 @@ class RedisClient():
         """
         # list
         proxies = []
+        if count < 1:
+            return proxies
+
         try:
+            # When providing users with proxies, we must make sure these proxies are all usable.
+            # However, it is much too slow for get(), because clean_proxies() needs to check all proxies in Redis.
+            self.clean_proxies()
+
             for index in range(count):
                 index = random.randint(0, self.queue_len-1)
-                proxies.append(self._db.lindex("proxy_list", index).decode("utf-8"))
-            # proxies = self._db.lrange("proxy_list", 0, count-1)
-            # self._db.ltrim("proxy_list", count, -1)    # 移除列表内没有在该索引之内的值
+                proxy = self._db.lindex("proxy_list", index).decode("utf-8")
+                proxies.append(proxy)
         except ValueError as ve:
             print("queue_len is too short(<1)", ve)
         except Exception as e:
             print("lxw:Unexpected Error", e)
         finally:
             print("Using proxies:", proxies)
+            if len(proxies) < count:
+                print("The requested count is larger than what we have in Redis, more proxies are needed.")
             return proxies
+
+    def clean_proxies(self):
+        """
+        Test whether the proxies in Redis is usable, and remove the useless proxies.
+        """
+        proxies = self._db.lrange("proxy_list", 0, -1)
+        for proxy in proxies:
+            if not isinstance(proxy, str):
+                proxy = proxy.decode("utf-8")
+            if not check_proxy_alive(proxy):
+                print("Remove useless proxy:{0} Current number of proxy available is:{1}".format(proxy, self.queue_len))
+                self._db.lrem("proxy_list", proxy, 0)
 
     def put(self, proxy):
         """

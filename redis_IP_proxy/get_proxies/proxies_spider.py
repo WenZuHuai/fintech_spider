@@ -6,4 +6,5 @@
 
 from scrapy import cmdline
 
-cmdline.execute("scrapy crawl daili66_spider -L WARNING".split())
+# cmdline.execute("scrapy crawl daili66_spider -L WARNING".split())
+cmdline.execute("scrapy crawl next_page_spider -L WARNING".split())

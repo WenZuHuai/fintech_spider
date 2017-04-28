@@ -19,7 +19,7 @@ class ProxyPoolTest(scrapy.Spider):
 
     # start_urls = ["http://xiujinniu.com/xiujinniu/index.php"]
     # start_urls = ["http://xiaoweiliu.cn"]
-    # start_urls = ["http://ipecho.net/plain"]
+    start_urls = ["http://ipecho.net/plain"]
 
     def parse(self, response):
         # print("hello")

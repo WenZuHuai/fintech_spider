@@ -29,10 +29,19 @@ def get_page(url, options={}):
 
 
 def check_proxy_alive(proxy):
+    """
+    when calling this method, YOU MUST make sure the type of proxy is str instead of bytes.
+    """
+    if not isinstance(proxy, str):
+        print("TypeError: Please make sure the type of proxy is str instead of bytes.")
+        return False
+
     try:
         proxies = {"http": proxy, "https": proxy}   # NOTE: 这里"http"和"https"一定要都写，不能只写http或者是只写https
         # req = requests.get(TEST_API, proxies=proxies, timeout=(5, 30))
         req = requests.get(TEST_API, proxies=proxies, timeout=3)
+        # print(type(req))
+        # print(req)
         return req.status_code == 200
     except Exception as e:
         # print("Bad Proxy", proxy)
