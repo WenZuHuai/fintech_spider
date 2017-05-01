@@ -48,5 +48,5 @@ class NewThreeBoard(scrapy.Spider):
         ntbi["finance"] = detail_dict.get("finance", {})   # 财务指标
         ntbi["top_ten_holders"] = detail_dict.get("topTenHolders", {})   # 十大股东
         ntbi["executives"] = detail_dict.get("executives", {})    # 高管人员
-        # yield ntbi    # 这儿要是去掉注释就会插入到mongo中,注意不要去掉注释.
+        yield ntbi    # 这儿要是去掉注释就会插入到mongo中,注意不要去掉注释.
 

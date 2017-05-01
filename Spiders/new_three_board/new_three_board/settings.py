@@ -92,5 +92,7 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-MONGODB_HOST = "192.168.1.36"
+# MONGODB_HOST = "192.168.1.36"  # hee
+MONGODB_HOST = "192.168.1.9"     # baobao_wifi
 MONGODB_PORT = 27017
+MONGODB_DATABASE = "neeq0501"
