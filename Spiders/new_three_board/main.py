@@ -7,7 +7,5 @@
 from scrapy import cmdline
 
 # cmdline.execute(["scrapy", "crawl", "new_three_board", "-L", "WARNING"])
-cmdline.execute("scrapy crawl neeq -L WARNING".split())
-
-# for i in range(10):
-#     print(i)
+# cmdline.execute("scrapy crawl neeq -L WARNING".split())
+cmdline.execute("scrapy crawl neeq".split())

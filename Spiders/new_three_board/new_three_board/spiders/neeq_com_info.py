@@ -19,6 +19,10 @@ class NewThreeBoard(scrapy.Spider):
 
     start_urls = ["http://www.neeq.com.cn/nqxxController/nqxx.do?page={0}&typejb=T&sortfield=xxzqdm&sorttype=asc".format(page)]
 
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(url=url, callback=self.parse)
+
     def parse(self, response):
         json_content = json.loads(response.body.decode("utf-8")[6:-2])    # null([{"content": .......}])
 
@@ -48,5 +52,5 @@ class NewThreeBoard(scrapy.Spider):
         ntbi["finance"] = detail_dict.get("finance", {})   # 财务指标
         ntbi["top_ten_holders"] = detail_dict.get("topTenHolders", {})   # 十大股东
         ntbi["executives"] = detail_dict.get("executives", {})    # 高管人员
-        yield ntbi    # 这儿要是去掉注释就会插入到mongo中,注意不要去掉注释.
+        # yield ntbi    # 这儿要是去掉注释就会插入到mongo中,注意不要去掉注释.
 

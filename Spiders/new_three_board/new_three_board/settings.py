@@ -19,8 +19,9 @@ NEWSPIDER_MODULE = 'new_three_board.spiders'
 #USER_AGENT = 'new_three_board (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-#ROBOTSTXT_OBEY = True
-ROBOTSTXT_OBEY = True
+# ROBOTSTXT_OBEY = True
+# ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -34,7 +35,8 @@ ROBOTSTXT_OBEY = True
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = True
+COOKIES_DEBUG = True
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -54,9 +56,14 @@ ROBOTSTXT_OBEY = True
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-#    'new_three_board.middlewares.MyCustomDownloaderMiddleware': 543,
+    # 'new_three_board.middlewares.MyCustomDownloaderMiddleware': 543,
+    # User-Agent
     "scrapy.downloadermiddlewares.useragent.UserAgentMiddleware":None,
     "new_three_board.middlewares.RotateUserAgentMiddleware":400,
+
+    # Cookie
+    # 'scrapy.contrib.downloadermiddleware.cookies.CookiesMiddleware': 700
+    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700
 }
 
 # Enable or disable extensions

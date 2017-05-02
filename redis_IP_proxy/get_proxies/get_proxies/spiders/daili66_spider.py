@@ -12,6 +12,20 @@ from redis_IP_proxy.utils import check_proxy_alive
 
 
 class Daili66Spider(scrapy.Spider):
+    """
+    66IP.cn有时候会限定cookie，这时候需要下面的代码
+    在settings中也需要相应的修改(settings.py参考new_three_board/settings.py)
+
+    cookies = {"_cfduid":"dfd9a215f03c6a0008a48e6fbe844c3cb1493704103", "cf_clearance":"9b1492af01429e5e8076dcaf0ec959668c1ef2b9-1493704107-604800"}
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(url=url, cookies=cookies, callback=self.parse)
+
+    cookies是从网站的F12->Network中拷贝出来的
+    
+    可以进一步尝试把cookies的修改和headers一样:放到middlewares.py中修改
+    """
     name = "daili66_spider"
     current_page = "index.html"
     proxy_db = RedisClient()
