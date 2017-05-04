@@ -7,10 +7,9 @@
 
 import base64   # Importing base64 library because we'll need it ONLY in case if the proxy we are going to use requires authentication
 import random
+import requests
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-
-from redis_IP_proxy.proxy_interface import RedisClient
 
 
 class RotateUserAgentMiddleware(UserAgentMiddleware):
@@ -47,19 +46,20 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
 
 
 class ProxyMiddleware(object):
-    client = RedisClient()
-
     # overwrite process request
     def process_request(self, request, spider):
-        # Set the location of the proxy
-        # return
-        # print(request)
-        proxy_list = self.client.get()
-        if proxy_list:
-            request.meta['proxy'] = "http://" + proxy_list[0]   # "http://" is essential here.
-            # request.meta['proxy'] = "" + proxy_list[0]    # NO
+        # proxy_list = self.client.get()
+        try:
+            req = requests.get("http://datazhiyuan.com:60001/plain", timeout=10)
+            # print(type(req))
+            # print(req)
+            # print(type(req.text))
+            print("Get an IP proxy:", req.text)
+            request.meta['proxy'] = "http://" + req.text   # "http://" is essential here.
             request.meta['download_timeout'] = 30.0
             request.meta['retry_times'] = 1
+        except Exception as e:
+            return
         """
         # Use the following lines if your proxy requires authentication
         proxy_user_pass = "USERNAME:PASSWORD"

@@ -9,23 +9,18 @@ Test the User-Agent and Proxy. Works well.
 
 import scrapy
 
-from redis_IP_proxy.proxy_interface import RedisClient
-
 
 class ProxyPoolTest(scrapy.Spider):
-    name = "ProxyPoolTest_spider"
-
-    client = RedisClient()
+    name = "test_proxy_pool_api"
 
     # start_urls = ["http://xiujinniu.com/xiujinniu/index.php"]
     # start_urls = ["http://xiaoweiliu.cn"]
     start_urls = ["http://ipecho.net/plain"]
 
     def parse(self, response):
-        # print("hello")
-        print("repsonse.headers:", response.headers)
+        # print("repsonse.headers:", response.headers)
         print("response.body:", response.body.decode("utf-8"))
-        print("Request:", response.request.headers)     # User-Agent does work
+        # print("Request:", response.request.headers)     # User-Agent does work
 
         """
         Scrapy w/o User-Agent:

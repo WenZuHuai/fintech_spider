@@ -7,5 +7,5 @@
 from scrapy import cmdline
 
 
-cmdline.execute("scrapy crawl ProxyPoolTest_spider -L WARNING".split())
+cmdline.execute("scrapy crawl test_proxy_pool_api -L WARNING".split())
 
