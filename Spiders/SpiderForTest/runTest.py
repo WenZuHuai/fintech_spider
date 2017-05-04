@@ -6,6 +6,9 @@
 
 from scrapy import cmdline
 
+# Supporting:
+# User-Agent
+# IP Proxy(API: http://datazhiyuan.com:60001/plain)
 
 cmdline.execute("scrapy crawl test_proxy_pool_api -L WARNING".split())
 

@@ -59,8 +59,8 @@ DOWNLOADER_MIDDLEWARES = {
     'SpiderForTest.middlewares.RotateUserAgentMiddleware': 543,
 
     # Proxy
-    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
-    # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
     'SpiderForTest.middlewares.ProxyMiddleware': 100,
 }
 
