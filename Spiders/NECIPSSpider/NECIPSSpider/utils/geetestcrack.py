@@ -62,8 +62,8 @@ class IndustryAndCommerceGeetestCrack():
         )
 
         #self.driver = webdriver.PhantomJS(desired_capabilities=dcap)
-        # self.driver = webdriver.Chrome("/home/hee/driver/chromedriver") # hee
-        self.driver = webdriver.Chrome(r"/home/lxw/Software/chromedirver_selenium/chromedriver")    # lxw
+        self.driver = webdriver.Chrome("/home/hee/driver/chromedriver") # hee
+        # self.driver = webdriver.Chrome(r"/home/lxw/Software/chromedirver_selenium/chromedriver")    # lxw
 
         
         #self.driver.maximize_window()
@@ -102,7 +102,7 @@ class IndustryAndCommerceGeetestCrack():
         time.sleep(random.uniform(2.0, 3.0))
         print('element: ', element.text)
 
-    def crop_captcha_image(self, gt_element_class_name="gt_box_holder"):
+    def crop_captcha_image(self, gt_element_class_name="gt_box"):
 
         """截取验证码图片
 
@@ -123,7 +123,7 @@ class IndustryAndCommerceGeetestCrack():
         print(left, top, right, bottom)
         screenshot = Image.open(BytesIO(screenshot))
         captcha = screenshot.crop((left, top, right, bottom))
-        captcha.save("%s.png" % uuid.uuid1())
+        # captcha.save("%s.png" % uuid.uuid1())
         return captcha
 
     # 点击刷新滑块验证码
@@ -135,8 +135,8 @@ class IndustryAndCommerceGeetestCrack():
     def is_pixel_equal(self, img1, img2, x, y):
         pix1 = img1.load()[x, y]
         pix2 = img2.load()[x, y]
-        if (abs(pix1[0] - pix2[0]) < 80) and (abs(pix1[1] - pix2[1]) < 80) and (
-                    abs(pix1[2] - pix2[2]) < 80):
+        if (abs(pix1[0] - pix2[0]) < 50) and (abs(pix1[1] - pix2[1]) < 50) and (
+                    abs(pix1[2] - pix2[2]) < 50):
             return True
         else:
             return False
@@ -376,7 +376,81 @@ class IndustryAndCommerceGeetestCrack():
             self.driver.quit()
         return content, cookies
 
+    def info_print(self, url, print_id = "btn_print",max_crack_times = 5):
+        self.driver.get(url)
+        wait = WebDriverWait(self.driver, 20)
+        element = wait.until(EC.presence_of_element_located((By.ID, print_id)))
+        time.sleep(random.uniform(2.0, 3.0))
+        element.click()
+        content = None
+        cookies = None
+
+        try:
+            count = 0
+            while count < max_crack_times:
+                count += 1
+                x_offset = self.calculate_slider_offset(
+                    slide_times=0,
+                    max_slide_times=5,
+                    gt_element_class_name="gt_box",
+                    is_gap_every_broad=self.is_gap_every_broad)
+                array_trail = self.get_trail_array(x_offset)
+                for x, y, t in array_trail:
+                    print(x, y, t)
+
+                element = self.driver.find_element_by_class_name(gt_slider_knob_name)
+                ActionChains(self.driver).click_and_hold(on_element=element).perform()
+                for x, y, t in array_trail:
+                    ActionChains(self.driver).move_to_element_with_offset(
+                        to_element=element,
+                        xoffset=x + 22,
+                        yoffset=y + 22).perform()
+                    # 这个动作在phantomjs里一定需要，否则 x 是不会移动的，phantomjs成败在此一举(chrome等忽略)
+                    ActionChains(self.driver).click_and_hold().perform()
+                    # 可以在调试的时候查看 x 是否有移动，这一点非常重要
+                    # temp_element = self.driver.find_element_by_class_name(gt_slider_knob_name)
+                    # print temp_element.location
+                    time.sleep(t)
+
+                time.sleep(0.4)
+                print('稍等一会儿，搜索结果马上出来...')
+                ActionChains(self.driver).release(on_element=element).perform()
+                x_offset += 1.2
+                status = self.drag_and_drop(
+                    x_offset=x_offset,
+                    gt_slider_knob_name=self.gt_slider_knob_name,
+                    result_list_verify_id=self.result_list_verify_id,
+                    result_list_verify_class=self.result_list_verify_class)
+                if status == 1 or status == 0:
+                    break
+            else:
+                print('验证码破解已经达到最大次数: %s' % max_crack_times)
+
+            if status == 0:
+                content, cookies = 0, None
+            elif status == -1:
+                content, cookies = None, None
+            else:
+                content, cookies = self.driver.page_source, self.driver.get_cookies()
+        except:
+            print(self.driver.page_source)
+            print(traceback.print_exc())
+        finally:
+            self.driver.quit()
+        return content, cookies
+
+
+    def switch_company(self,search_text):
+        content, cookies = c.crack(search_text)
+        element = self.driver.find_element_by_xpath('//div[@class="main-layout fw f14"]/a[@class="search_list_item db"]')
+        element.click()
+
+
+
+
 
 if __name__ == '__main__':
     c = IndustryAndCommerceGeetestCrack()
-    content, cookies = c.crack("中国工商银行股份有限公司")    # c.crack()
+    # content, cookies = c.crack("中国工商银行股份有限公司")    # c.crack()
+    c.switch_company("中国工商银行股份有限公司")
+    # c.info_print(url="http://www.gsxt.gov.cn/%7BD86upu-5WeF_Wu2x8KvkvDpm4PPyLma_RE8y9ARpVg3vIVvLWUqFsnx4aqDhXToiXCmmcBdAE36g8J9RKgOmxe59Vax6narW0nLhxEceSN3Gvu2FPAPNdPRnYaWop-sJm1uStzc0A0-HNH-EFiSZSA-1494312708079%7D")
