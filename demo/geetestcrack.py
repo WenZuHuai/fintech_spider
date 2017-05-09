@@ -6,7 +6,7 @@ import time
 import uuid
 import math
 import random
-import StringIO
+from io import BytesIO
 import traceback
 from PIL import Image
 from selenium import webdriver
@@ -16,8 +16,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
 
 
 class IndustryAndCommerceGeetestCrack(): 
@@ -85,7 +84,7 @@ class IndustryAndCommerceGeetestCrack():
             :gt_element_class_name: 验证码图片网页元素class名
         """
         # 根据页面进入主页面，并等待搜索框id出现
-        print 'url: ', url
+        print('url: ', url)
         self.driver.get(url)
         
         wait = WebDriverWait(self.driver, 20)
@@ -102,7 +101,7 @@ class IndustryAndCommerceGeetestCrack():
             EC.presence_of_element_located((By.CLASS_NAME,
                                             gt_element_class_name)))
         time.sleep(random.uniform(2.0, 3.0))
-        print 'element: ', element.text
+        print('element: ', element.text)
 
     def crop_captcha_image(self, gt_element_class_name="gt_box_holder"):
 
@@ -122,10 +121,10 @@ class IndustryAndCommerceGeetestCrack():
         bottom = int(location['y'] + size['height'])
 
         screenshot = self.driver.get_screenshot_as_png()
-        print left, top, right, bottom
-        screenshot = Image.open(StringIO.StringIO(screenshot))
+        print(left, top, right, bottom)
+        screenshot = Image.open(BytesIO(screenshot))
         captcha = screenshot.crop((left, top, right, bottom))
-        #captcha.save("%s.png" % uuid.uuid4().get_hex())
+        captcha.save("%s.png" % uuid.uuid1())
         return captcha
 
     # 点击刷新滑块验证码
@@ -171,8 +170,8 @@ class IndustryAndCommerceGeetestCrack():
             x_start, distance_one, distance_two = 61, 18, 8
         else:
             x_start, distance_one, distance_two = 45, 2, 0
-        for i in xrange(x_start, w1):
-            for j in xrange(h1):
+        for i in range(x_start, w1):
+            for j in range(h1):
                 if not self.is_pixel_equal(img1, img2, i, j):
                     left = i
                     flag = True
@@ -191,7 +190,7 @@ class IndustryAndCommerceGeetestCrack():
 
         else:
             left = left - distance_two
-        print u"需要划动的像素点：", left
+        print("需要划动的像素点：", left)
         return left
 
     def drag_and_drop_test(self,
@@ -227,7 +226,7 @@ class IndustryAndCommerceGeetestCrack():
         y = random.choice(array_y)
         t = random.randint(3, 20)/100.0
         while distance - x >= 0:
-            print x, y, t
+            print(x, y, t)
             array_trail.append((x, y, t))
             distance = distance - x
             if distance == 0:
@@ -269,7 +268,7 @@ class IndustryAndCommerceGeetestCrack():
 
         array_trail = self.get_trail_array(x_offset)
         for x, y, t in array_trail:
-            print x, y, t
+            print(x, y, t)
 
         element = self.driver.find_element_by_class_name(gt_slider_knob_name)
         ActionChains(self.driver).click_and_hold(on_element=element).perform()
@@ -286,13 +285,13 @@ class IndustryAndCommerceGeetestCrack():
             time.sleep(t)
 
         time.sleep(0.4)
-        print u'稍等一会儿，搜索结果马上出来...'
+        print('稍等一会儿，搜索结果马上出来...')
         ActionChains(self.driver).release(on_element=element).perform()
 
         time.sleep(0.5)
         element = self.driver.find_element_by_class_name('gt_info_text')
         status = element.text
-        print u"破解验证码的结果: ", status
+        print("破解验证码的结果: ", status)
         # 这个延时必须有，在滑动后等待回复原状
         if not status:
             self.click_refresh()
@@ -309,7 +308,7 @@ class IndustryAndCommerceGeetestCrack():
                 By.XPATH, result_numbers_xpath)))
         time.sleep(random.uniform(3.0, 4.0))
         number = element.text
-        print u'搜索结果数量: ', number
+        print('搜索结果数量: ', number)
         if int(number) == 0:
             return 0
         else:
@@ -361,7 +360,7 @@ class IndustryAndCommerceGeetestCrack():
                 if status == 1 or status == 0:
                     break
             else:
-                print u'验证码破解已经达到最大次数: %s' % max_crack_times
+                print('验证码破解已经达到最大次数: %s' % max_crack_times)
 
             if status == 0:
                 content, cookies = 0, None
@@ -370,8 +369,8 @@ class IndustryAndCommerceGeetestCrack():
             else:
                 content, cookies = self.driver.page_source, self.driver.get_cookies()
         except:
-            print self.driver.page_source
-            print traceback.print_exc()
+            print(self.driver.page_source)
+            print(traceback.print_exc())
         finally:
             self.driver.quit()
         return content, cookies
@@ -380,89 +379,5 @@ class IndustryAndCommerceGeetestCrack():
 if __name__ == '__main__':
     c = IndustryAndCommerceGeetestCrack()
     content, cookies = c.crack()
-    with open("content.html", "w") as fp:
-        fp.write(content)
-    #print c.crack()
 
-    # # 湖北
-    # c = IndustryAndCommerceGeetestCrack(
-    #     url="http://xyjg.egs.gov.cn/ECPS_HB/index.jspx", 
-    #     search_text=u"工业大学",
-    #     result_list_verify_id='gggscpnamebox')
-    # print c.crack()[1]
-
-    # 吉林
-    #c = IndustryAndCommerceGeetestCrack(
-    #    url="http://211.141.74.198:8083/", 
-    #    search_text=u"工业大学",
-    #    input_id="txtSearch",
-    #    search_element_id="btnSearch",
-    #    gt_element_class_name="gt_box",
-    #    gt_slider_knob_name="gt_slider_knob",
-    #    result_numbers_xpath='/html/body/div[1]/div[3]/div[1]/span[2]',
-    #    result_list_verify_class='m-searchresult')
-    #print c.crack(3)[1]
-
-    # # 陕西
-    # c = IndustryAndCommerceGeetestCrack(
-    #     url="http://xygs.snaic.gov.cn/ztxy.do?method=index&random=1479870596271", 
-    #     search_text=u"工业大学",
-    #     input_id="entname",
-    #     search_element_id="popup-submit",
-    #     gt_element_class_name="gt_box",
-    #     gt_slider_knob_name="gt_slider_knob",
-    #     result_numbers_xpath='//*[@id="myDiv"]/p/span',
-    #     result_list_verify_class='result_item')
-    # print c.crack()[1]
-
-    # # 广西
-    # c = IndustryAndCommerceGeetestCrack(
-    #     url="http://www.gxqyxygs.gov.cn/sydq/loginSydqAction!sydq.dhtml", 
-    #     search_text=u"工业大学",
-    #     input_id="keyword_qycx",
-    #     search_element_id="popup-submit",
-    #     gt_element_class_name="gt_box",
-    #     gt_slider_knob_name="gt_slider_knob",
-    #     result_numbers_xpath='/html/body/div[5]/p/span',
-    #     result_list_verify_class='title')
-    # print c.crack()[1]
-
-    # # 河北
-    # c = IndustryAndCommerceGeetestCrack(
-    #     url="http://www.hebscztxyxx.gov.cn/notice/", 
-    #     search_text=u"工业大学",
-    #     input_id="keyword",
-    #     search_element_id="buttonSearch",
-    #     gt_element_class_name="gt_box",
-    #     gt_slider_knob_name="gt_slider_knob",
-    #     result_numbers_xpath='//*[@id="wrap1366"]/div[3]/div/div/p/span',
-    #     result_list_verify_class='tableContent')
-    # print c.crack()[1]
-
-    # # 云南
-    # c = IndustryAndCommerceGeetestCrack(
-    #     url="http://gsxt.ynaic.gov.cn/notice/", 
-    #     search_text=u"工业大学",
-    #     input_id="keyword",
-    #     search_element_id="buttonSearch",
-    #     gt_element_class_name="gt_box",
-    #     gt_slider_knob_name="gt_slider_knob",
-    #     result_numbers_xpath='//*[@id="wrap1366"]/div[3]/div/div/p/span',
-    #     result_list_verify_class='tableContent')
-    # print c.crack()[1]
-
-    # # 青海
-    # c = IndustryAndCommerceGeetestCrack(
-    #     url='http://218.95.241.36/index.jspx',
-    #     search_text=u'中国移动',
-    #     input_id='searchText',
-    #     search_element_id='click',
-    #     gt_element_class_name='gt_box',
-    #     gt_slider_knob_name='gt_slider_knob',
-    #     result_numbers_xpath='//*[@id="searchtipsu1"]/p/span[2]',
-    #     result_list_verify_id='gggscpnametext',
-    #     result_list_verify_class=None,
-    #     is_gap_every_broad=True)
-    # content, cookies = c.crack()
-    # print cookies
 
