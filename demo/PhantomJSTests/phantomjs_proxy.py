@@ -12,7 +12,8 @@ from selenium.webdriver.common.proxy import ProxyType
 
 def main():
     # browser = webdriver.PhantomJS()   # Be OK in command line, but not in PyCharm.
-    browser = webdriver.PhantomJS(r"/home/lxw/Downloads/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs")
+    # browser = webdriver.PhantomJS(r"/home/lxw/Downloads/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs")
+    browser = webdriver.Chrome(r"/home/lxw/Software/chromedirver_selenium/chromedriver") # OK
     browser.get("http://ipecho.net/plain")
     print('session_id: ', browser.session_id)
     print('page_source: ', browser.page_source)

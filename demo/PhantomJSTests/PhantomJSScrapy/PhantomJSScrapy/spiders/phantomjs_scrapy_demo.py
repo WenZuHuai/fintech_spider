@@ -19,20 +19,14 @@ class PhantomJSScrapyDemo(scrapy.Spider):
     def parse(self, response):
         # print(type(response.body))    # bytes
         result = response.body
-        code_detect = chardet.detect(response.body)['encoding']
+        code_detect = chardet.detect(response.body)["encoding"]
         # code_detect = chardet.detect(result)['encoding']
         # print(code_detect)
         if code_detect:
-            html = result.decode(code_detect, 'ignore')
+            html = result.decode(code_detect, "ignore")
         else:
-            html = result.decode("utf-8", 'ignore')
+            html = result.decode("utf-8", "ignore")
 
         print(html)
         f = codecs.open("/home/lxw/phantomjs_result.html", "w")
         f.write(html)
-
-        """
-        with open("/home/lxw/phantomjs_result.html", "w") as f:
-            # f.write(response.body.decode("utf-8"))    # UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa1 in position 137: invalid start byte
-            f.write(html.encode())
-        """

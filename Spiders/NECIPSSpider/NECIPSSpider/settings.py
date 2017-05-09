@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'NECIPSSpider.spiders'
 #USER_AGENT = 'NECIPSSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -52,9 +52,19 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'NECIPSSpider.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    # User-Agent
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'NECIPSSpider.middlewares.RotateUserAgentMiddleware': 540,   # NOTE: this value must be smaller(higher priority) than PhantomJS's priority valuea(JavaScriptMiddleware: 543), otherwise User-Agent will NOT work.
+
+    # Proxy
+    # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
+    #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    #'NECIPSSpider.middlewares.ProxyMiddleware': 100,
+
+    # PhantomJS
+    'NECIPSSpider.middlewares.JavaScriptMiddleware': 543,    # 键为中间件类的路径，值为中间件的顺序
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
