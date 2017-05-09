@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-# coding:utf8
+# coding:utf-8
 
-import sys
 import time
 import uuid
 import math
@@ -15,8 +14,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-
 
 
 class IndustryAndCommerceGeetestCrack(): 
@@ -65,7 +62,9 @@ class IndustryAndCommerceGeetestCrack():
         )
 
         #self.driver = webdriver.PhantomJS(desired_capabilities=dcap)
-        self.driver = webdriver.Chrome("/home/hee/driver/chromedriver")
+        # self.driver = webdriver.Chrome("/home/hee/driver/chromedriver") # hee
+        self.driver = webdriver.Chrome(r"/home/lxw/Software/chromedirver_selenium/chromedriver")    # lxw
+
         
         #self.driver.maximize_window()
         time.sleep(random.uniform(2.0, 3.0))
@@ -321,11 +320,12 @@ class IndustryAndCommerceGeetestCrack():
                     EC.presence_of_element_located((By.ID, result_list_verify_id)))
             time.sleep(random.uniform(2.0, 3.0))
             return 1
+
     def run(self):
         self.get_search_page()
         self.crop_captcha_image()
 
-    def crack(self, max_crack_times=5):
+    def crack(self, search_text, max_crack_times=5):
         """
         max_crack_times: 最大点击刷新的数量
         Returns: 搜索结果列表的网页源代码，访问的cookies
@@ -333,6 +333,7 @@ class IndustryAndCommerceGeetestCrack():
         content == -1: 在破解过程中出错了，可以传参数不对，可能本身出错
         else source code
         """
+        self.search_text = search_text
         content = None
         cookies = None
         try:
@@ -378,6 +379,4 @@ class IndustryAndCommerceGeetestCrack():
 
 if __name__ == '__main__':
     c = IndustryAndCommerceGeetestCrack()
-    content, cookies = c.crack()
-
-
+    content, cookies = c.crack("中国工商银行股份有限公司")    # c.crack()
