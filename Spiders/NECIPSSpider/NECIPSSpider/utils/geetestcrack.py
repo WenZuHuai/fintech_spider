@@ -123,7 +123,7 @@ class IndustryAndCommerceGeetestCrack():
         print(left, top, right, bottom)
         screenshot = Image.open(BytesIO(screenshot))
         captcha = screenshot.crop((left, top, right, bottom))
-        # captcha.save("%s.png" % uuid.uuid1())
+        captcha.save("%s.png" % uuid.uuid1())
         return captcha
 
     # 点击刷新滑块验证码
