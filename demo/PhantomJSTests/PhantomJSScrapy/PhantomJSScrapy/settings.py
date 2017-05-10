@@ -58,12 +58,13 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'PhantomJSScrapy.middlewares.RotateUserAgentMiddleware': 540,   # NOTE: this value must be smaller(higher priority) than PhantomJS's priority valuea(JavaScriptMiddleware: 543), otherwise User-Agent will NOT work.
 
+    # PhantomJS
     # 'PhantomJSScrapy.middlewares.MyCustomDownloaderMiddleware': 543,
-    # 'PhantomJSScrapy.middlewares.JavaScriptMiddleware': 543,    # 键为中间件类的路径，值为中间件的顺序
+    'PhantomJSScrapy.middlewares.JavaScriptMiddleware': 543,    # 键为中间件类的路径，值为中间件的顺序
 
 }
 
-AJAXCRAWL_ENABLED = True
+# AJAXCRAWL_ENABLED = True
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html

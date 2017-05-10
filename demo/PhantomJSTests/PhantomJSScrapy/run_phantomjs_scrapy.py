@@ -8,7 +8,7 @@ from scrapy import cmdline
 
 # Supporting:
 # User-Agent
-# IP Proxy(API: http://datazhiyuan.com:60001/plain)
+# PhantomJS
 
 cmdline.execute("scrapy crawl phantomjs_scrapy -L WARNING".split())
 
