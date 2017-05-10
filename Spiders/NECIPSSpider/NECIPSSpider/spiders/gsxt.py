@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import NECIPSSpider.utils
-from NECIPSSPider.NECIPSSPider.utils import geetestcrack
+from NECIPSSpider.NECIPSSpider.utils import geetestcrack
 import csv
 import sys
 class GsxtSpider(scrapy.Spider):
