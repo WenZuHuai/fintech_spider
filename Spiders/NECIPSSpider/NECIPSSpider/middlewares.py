@@ -51,20 +51,26 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
 class JavaScriptMiddleware(object):
     def process_request(self, request, spider):
         if spider.name == "gsxt":
-            print("PhantomJS is starting...")
-            driver = webdriver.PhantomJS(r"/home/lxw/Downloads/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs")   # OK
-            # driver = webdriver.Chrome(r"/home/lxw/Software/chromedirver_selenium/chromedriver") # OK
+            # print("PhantomJS is starting...")
+            # driver = webdriver.PhantomJS(r"/home/lxw/Downloads/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs")   # OK
+            driver = webdriver.Chrome(r"/home/lxw/Software/chromedirver_selenium/chromedriver") # OK
+
+            """
+            # Using IP Proxies:
             # 打开两次chrome？那第一次chrome会暴露IP吗？应该没事儿，没有访问特定的网站
             # 利用DesiredCapabilities(代理设置)参数值，重新打开一个sessionId，我看意思就相当于浏览器清空缓存后，加上代理重新访问一次url
             proxy = webdriver.Proxy()
             proxy.proxy_type = ProxyType.MANUAL
             req = requests.get("http://datazhiyuan.com:60001/plain", timeout=10)
             print("Get an IP proxy:", req.text)
+
             if req.text:
                 proxy.http_proxy = req.text  # "1.9.171.51:800"
             # 将代理设置添加到webdriver.DesiredCapabilities.PHANTOMJS中
             proxy.add_to_capabilities(webdriver.DesiredCapabilities.PHANTOMJS)
             driver.start_session(webdriver.DesiredCapabilities.PHANTOMJS)
+            """
+
             driver.get(request.url) # 京东的商品详情页面太慢了, 改用http://roll.news.qq.com/页面
             time.sleep(2)
             js = "var q=document.documentElement.scrollTop=10000"

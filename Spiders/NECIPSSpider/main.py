@@ -6,9 +6,9 @@
 
 # Supporting:
 # 0. CAPTCHA
-# 1. User-Agent
-# 2. IP Proxy(API: http://datazhiyuan.com:60001/plain)
-# 3. PhantomJS
+# 1. PhantomJS
+# 2. User-Agent
+# 3. IP Proxy(API: http://datazhiyuan.com:60001/plain)
 
 from scrapy import cmdline
 # import sys
