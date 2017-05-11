@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for PhantomJSScrapy project
+# Scrapy settings for CJOSpider project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,18 +9,17 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'PhantomJSScrapy'
+BOT_NAME = 'CJOSpider'
 
-SPIDER_MODULES = ['PhantomJSScrapy.spiders']
-NEWSPIDER_MODULE = 'PhantomJSScrapy.spiders'
+SPIDER_MODULES = ['CJOSpider.spiders']
+NEWSPIDER_MODULE = 'CJOSpider.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'PhantomJSScrapy (+http://www.yourdomain.com)'
+#USER_AGENT = 'CJOSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-# ROBOTSTXT_OBEY = True
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -48,23 +47,14 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'PhantomJSScrapy.middlewares.PhantomjsscrapySpiderMiddleware': 543,
+#    'CJOSpider.middlewares.CjospiderSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-DOWNLOADER_MIDDLEWARES = {
-    # User-Agent
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'PhantomJSScrapy.middlewares.RotateUserAgentMiddleware': 540,   # NOTE: this value must be smaller(higher priority) than PhantomJS's priority valuea(JavaScriptMiddleware: 543), otherwise User-Agent will NOT work.
-
-    # PhantomJS
-    # 'PhantomJSScrapy.middlewares.MyCustomDownloaderMiddleware': 543,
-    'PhantomJSScrapy.middlewares.JavaScriptMiddleware': 543,    # 键为中间件类的路径，值为中间件的顺序
-
-}
-
-# AJAXCRAWL_ENABLED = True
+#DOWNLOADER_MIDDLEWARES = {
+#    'CJOSpider.middlewares.MyCustomDownloaderMiddleware': 543,
+#}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -75,7 +65,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'PhantomJSScrapy.pipelines.PhantomjsscrapyPipeline': 300,
+#    'CJOSpider.pipelines.CjospiderPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

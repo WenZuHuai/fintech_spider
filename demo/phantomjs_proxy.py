@@ -23,7 +23,8 @@ def main():
     # 利用DesiredCapabilities(代理设置)参数值，重新打开一个sessionId，我看意思就相当于浏览器清空缓存后，加上代理重新访问一次url
     proxy = webdriver.Proxy()
     proxy.proxy_type = ProxyType.MANUAL
-    req = requests.get("http://datazhiyuan.com:60001/plain", timeout=10)
+    # req = requests.get("http://datazhiyuan.com:60001/plain", timeout=10)
+    req = requests.get("http://localhost:60001/plain", timeout=10)
     print("Get an IP proxy:", req.text)
     if req.text:
         proxy.http_proxy = req.text    # '1.9.171.51:800'
