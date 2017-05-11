@@ -123,10 +123,18 @@ class CaptchaRecognize:
 if __name__=='__main__':
     imageRecognize=CaptchaRecognize()
 
+    # single
+    img1 = Image.open("L.png")
+    result = imageRecognize.recognise(img1)
+    string = [''.join(item[1]) for item in result]
+    print(string)
+
+    """
+    # multiple
     for pg in os.listdir('images'):
-        print pg
+        print(pg)
         img1 = Image.open("images/{}".format(pg))
         result=imageRecognize.recognise(img1)
         string=[''.join(item[1]) for item in result]
         print(string)
-
+    """

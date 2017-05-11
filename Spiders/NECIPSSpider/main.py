@@ -5,7 +5,7 @@
 # Date: 5/9/17 3:30 PM
 
 # Supporting:
-# 0. CAPTCHA
+# 0. CAPTCHA(2nd Generation)
 # 1. PhantomJS
 # 2. User-Agent
 # 3. IP Proxy(API: http://datazhiyuan.com:60001/plain)

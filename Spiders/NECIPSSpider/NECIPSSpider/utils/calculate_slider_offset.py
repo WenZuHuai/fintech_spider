@@ -99,7 +99,7 @@ def crop_captcha_image(driver, gt_element_class_name="gt_box"):
     bottom = int(location['y'] + size['height'])
     screenshot = driver.get_screenshot_as_png()
     print(left, top, right, bottom)
-    screenshot = Image.open(BytesIO(screenshot))
+    screenshot = Image.open(BytesIO(screenshot))    # Python 2: StringIO, Python3: BytesIO
     captcha = screenshot.crop((left, top, right, bottom))
     captcha.save("%s.png" % uuid.uuid1())
     return captcha

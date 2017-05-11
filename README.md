@@ -34,6 +34,7 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 1.
 
 [Xiaowei Liu](https://github.com/lxw0109):
+0. add referer to NECIPSpider_wo_scrapy.py
 1. improve the policy to get the usable proxy
 the free proxy is much too unstable and slow.
 2. threadpool for NECIPSSpider_wo_scrapy.py
