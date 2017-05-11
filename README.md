@@ -9,7 +9,7 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 ### Structrue of fintech_spider
 
 | Directory | Author | Usage |
-|------|------|------|
+|------|:------:|------|
 | Anti_Anti_Spider | [hee](https://github.com/hee0624) |  |
 | | |
 | demo |  | Some Demonstrations(e.g. PhantomJS/Proxies, etc.) |
