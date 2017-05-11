@@ -4,6 +4,7 @@
 # Author: lxw
 # Date: 5/10/17 4:24 PM
 
+from lxml import etree
 import random
 import requests
 from selenium import webdriver
@@ -23,6 +24,7 @@ TODO：
 整合线程池
 """
 
+TIMEOUT = 60
 
 # the default user_agent_list composes chrome,I E,firefox,Mozilla,opera,netscape
 # for more user agent strings,you can find it in http://www.useragentstring.com/pages/useragentstring.php
@@ -66,76 +68,119 @@ user_agent_list = [
 ]
 
 
-def start():
-    """
-    References:
-    1. [设置PHANTOMJS的USER-AGENT](http://smilejay.com/2013/12/set-user-agent-for-phantomjs/)
-    2. [Selenium 2 - Setting user agent for IE and Chrome](http://stackoverflow.com/questions/6940477/selenium-2-setting-user-agent-for-ie-and-chrome)
-    """
-    ua = random.choice(user_agent_list)
-    if ua:
-        print("Current User-Agent is:", ua)
-
-        # PhantomJS
-        dcap = dict(DesiredCapabilities.PHANTOMJS)  # PhantomJS
-        dcap["phantomjs.page.settings.userAgent"] = ua    # PhantomJS
-        driver = webdriver.PhantomJS(executable_path=r"/home/lxw/Downloads/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs", desired_capabilities=dcap)   # PhantomJS
-
-        """
-        # Chrome
-        options = webdriver.ChromeOptions()
-        options.add_argument("--user-agent=" + ua)
-        driver = webdriver.Chrome(executable_path=r"/home/lxw/Software/chromedirver_selenium/chromedriver", chrome_options=options)
-        """
-
-        """
-        # Using IP Proxies:
-        # 打开两次chrome？那第一次chrome会暴露IP吗？应该没事儿，没有访问特定的网站
-        # 利用DesiredCapabilities(代理设置)参数值，重新打开一个sessionId，我看意思就相当于浏览器清空缓存后，加上代理重新访问一次url
-        proxy = webdriver.Proxy()
-        proxy.proxy_type = ProxyType.MANUAL
+def get_proxy():
+    try:
         # req = requests.get("http://datazhiyuan.com:60001/plain", timeout=10)
         req = requests.get("http://localhost:60001/plain", timeout=10)
         if req.text:
-            print("Get an IP proxy:", req.text)
-            proxy.http_proxy = req.text  # "1.9.171.51:800"
-
-        # 将代理设置添加到webdriver.DesiredCapabilities.PHANTOMJS中
-        # proxy.add_to_capabilities(webdriver.DesiredCapabilities.PHANTOMJS)
-        # driver.start_session(webdriver.DesiredCapabilities.PHANTOMJS)
-        # PhantomJS
-        proxy.add_to_capabilities(dcap)
-        driver.start_session(dcap)
-        """
-
-        """
-        # Chrome
-        proxy.add_to_capabilities(webdriver.DesiredCapabilities.CHROME)
-        driver.start_session(webdriver.DesiredCapabilities.CHROME)
-        """
+            print("Get an IP proxy:", req.text)     # req.text: "119.75.213.61:80"
+            return req.text
+        return None
+    except Exception as e:
+        print("lxw_Exception: in get_proxy(). ", e)
+        return None
 
 
-        # 设置超时时间
-        driver.set_page_load_timeout(90)
-        driver.set_script_timeout(90)  # 这两种设置都进行才有效
+def get_driver_phantomjs():
+    """
+    References:
+    PhantomJS:
+    1. [设置PHANTOMJS的USER-AGENT](http://smilejay.com/2013/12/set-user-agent-for-phantomjs/)
+    2. [Selenium 2 - Setting user agent for IE and Chrome](http://stackoverflow.com/questions/6940477/selenium-2-setting-user-agent-for-ie-and-chrome)
+    """
+    dcap = dict(DesiredCapabilities.PHANTOMJS)
 
-        try:
-            # driver.get("http://ipecho.net/plain")
-            driver.get("http://xiujinniu.com/xiujinniu/index.php")
-        except TimeoutException as te:
-            print("lxw_NOTE: TimeoutException. ", te)
-        else:
-            time.sleep(2)
-            print(driver.page_source)
+    # Setting User-Agent
+    ua = random.choice(user_agent_list)
+    if ua:
+        print("Current User-Agent is:", ua)
+        dcap["phantomjs.page.settings.userAgent"] = ua
 
-        """
-        driver.get(request.url) # 京东的商品详情页面太慢了, 改用http://roll.news.qq.com/页面
-        time.sleep(2)
-        js = "var q=document.documentElement.scrollTop=10000"
-        driver.execute_script(js)   # 可执行js，模仿用户操作。此处为将页面拉至最底端。
-        time.sleep(3)
-        body = driver.page_source
-        """
+    driver = webdriver.PhantomJS(executable_path=r"/home/lxw/Downloads/phantomjs/phantomjs-2.1.1-linux-x86_64/bin/phantomjs", desired_capabilities=dcap)
+
+    """
+    # Setting IP Proxies
+    # 利用DesiredCapabilities(代理设置)参数值，重新打开一个sessionId，我看意思就相当于浏览器清空缓存后，加上代理重新访问一次url
+    proxy = webdriver.Proxy()
+    proxy.proxy_type = ProxyType.MANUAL
+    ip_proxy = get_proxy()
+    if ip_proxy:
+        proxy.http_proxy = ip_proxy
+
+    # 将代理设置添加到webdriver.DesiredCapabilities.PHANTOMJS中
+    # proxy.add_to_capabilities(DesiredCapabilities.PHANTOMJS)
+    # driver.start_session(DesiredCapabilities.PHANTOMJS)
+    proxy.add_to_capabilities(dcap)
+    driver.start_session(dcap)
+    """
+
+    # 设置超时时间
+    driver.set_page_load_timeout(TIMEOUT)
+    driver.set_script_timeout(TIMEOUT)  # 这两种设置都进行才有效
+
+    return driver
+
+def get_driver_chrome():
+    """
+    References:
+    ChromeDriver:
+    [爬虫：3. selenium](http://www.jianshu.com/p/2631bf34328e)
+    """
+    options = webdriver.ChromeOptions()
+
+    # Setting User-Agent
+    ua = random.choice(user_agent_list)
+    if ua:
+        print("Current User-Agent is:", ua)
+        options.add_argument("--user-agent=" + ua)
+
+    """
+    # Setting IP Proxies
+    ip_proxy = get_proxy()
+    if ip_proxy:
+        options.add_argument('--proxy-server=' + ip_proxy)
+    """
+    driver = webdriver.Chrome(executable_path=r"/home/lxw/Software/chromedirver_selenium/chromedriver", chrome_options=options)
+
+    # 设置超时时间
+    driver.set_page_load_timeout(TIMEOUT)
+    driver.set_script_timeout(TIMEOUT)  # 这两种设置都进行才有效
+
+    return driver
+
 
 if __name__ == "__main__":
-    start()
+    # driver = get_driver_phantomjs()
+    driver = get_driver_chrome()
+
+    try:
+        # driver.get("http://ipecho.net/plain")
+        # driver.get("http://xiujinniu.com/xiujinniu/index.php")
+        driver.get("http://www.ip138.com/ua.asp")      # 查看当前请求的User-Agent和所使用的IP
+    except TimeoutException as te:
+        print("lxw_NOTE: TimeoutException. ", te)
+    else:
+        time.sleep(2)
+        print("OK")
+        # sourcecode = driver.page_source
+        selector = etree.HTML(driver.page_source)
+        try:
+            trs = selector.xpath('//table/tbody')[2]
+        except IndexError as ie:
+            print("Getting page_source Error:", driver.page_source)
+        else:
+            td_list = trs.xpath('./tr/td')
+            for td in td_list:
+                print(td.xpath("string(.)").replace("\n", " ").replace("  ", ""))
+    finally:
+        driver.quit()
+
+
+    """
+    driver.get(request.url) # 京东的商品详情页面太慢了, 改用http://roll.news.qq.com/页面
+    time.sleep(2)
+    js = "var q=document.documentElement.scrollTop=10000"
+    driver.execute_script(js)   # 可执行js，模仿用户操作。此处为将页面拉至最底端。
+    time.sleep(3)
+    body = driver.page_source
+    """
