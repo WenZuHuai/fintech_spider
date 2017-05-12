@@ -5,7 +5,14 @@
 # Date: 5/11/17 5:23 PM
 
 import codecs
+import random
 import requests
+from requests import Request, Session
+
+from Spiders.public_utils import user_agent_list
+from Spiders.public_utils import get_proxy
+from Spiders.public_utils import get_proxy_xcdl
+
 
 def main():
     # url = "http://wenshu.court.gov.cn/List/ListContent?MmEwMD=1JpvOqOnfbRJY.ls32KFV38zmLyBRRktcWoysenn2IJqvgfLVMpoAecg1kGJ.aGYFF2XnoT6p8s.gST9LgzK25YqA6H_5s4i_2.eQE1dDLRIZzqIWqk9Vx8wRbdHHMJUxiS_Z5QTD1_5xvWkpong96yuqp79s0DxEAujonmjd3hfauzwIH8X7KX0Ky988Ts0Zo7UsppQTPqS6N7K8oogSZxqDBiGoOl2vK19zj6eoz7BZ4UKBg_MAQQusagJ7DYvtBbenxgeGOEH_Rd2GngtWzi2z7cSgfuiNQMxGIa7bdws9hN0k6zQEloHJI.J9B6bMHkTIi5b09H1LXvFusdb951fFTe3TpP.nYYxG_FEQn9x2",
@@ -18,7 +25,57 @@ def main():
     # print(response.text.encode("utf-8"))
     print(response.text.replace("\\u0027", "'"))
 
+
+def post_crawl():
+    url = "http://wenshu.court.gov.cn/List/ListContent"
+    data = {
+        "Param": "案件类型:刑事案件,裁判年份:2004",
+        # "Param": "",
+        "Index": 1,
+        "Page": 5,
+        "Order": "法院层级",
+        "Direction": "asc",
+    }
+
+    s = Session()
+
+    try:
+        # response = requests.post(url=url, data=data)
+        headers = {"Referer": "http://wenshu.court.gov.cn/"}
+        ua = random.choice(user_agent_list)
+        if ua:
+            print("Using User-Agent:", ua)
+            headers["User-Agent"] = ua
+
+        print("headers", headers)
+
+        # req = Request("POST", url=url, data=data, headers=headers)
+        req = Request("POST", url=url, data=data, headers=headers)
+        prepped = s.prepare_request(req)
+        # response = s.send(prepped, proxies, timeout)     # http://blog.csdn.net/qq_18863573/article/details/52775130
+
+        # with proxy
+        try:
+            # proxy = get_proxy()    # proxy: "119.75.213.61:80"
+            proxy = get_proxy_xcdl()    # proxy: "119.75.213.61:80"
+        except Exception as e:
+            print("lxw_Excetion_get_proxy_xcdl", e)
+            response = s.send(prepped, timeout=60)
+        else:
+            proxies = {
+                "http": proxy,
+                "https": proxy,
+            }
+            response = s.send(prepped, proxies=proxies, timeout=60)
+
+        # w/o proxy
+        response = s.send(prepped, timeout=60)
+    except Exception as e:
+        print("lxw_Exception", e)
+    else:
+        print(response.text)
+
+
 if __name__ == "__main__":
-    main()
-
-
+    # main()
+    post_crawl()
