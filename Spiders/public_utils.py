@@ -6,7 +6,7 @@
 
 import requests
 import random
-import os
+import time
 
 
 # the default user_agent_list composes chrome,I E,firefox,Mozilla,opera,netscape
@@ -87,6 +87,28 @@ def get_proxy_xcdl():
         return None
 
 
+def get_proxy_dxdl():   # 收费的代理API
+    """
+    稳定性和可用性 很好，但不能请求太频繁了，如果太频繁了会导致无法获取到代理
+    """
+    try:
+        """
+        headers = {"Host": "api.xicidaili.com"}
+        ua = random.choice(user_agent_list)
+        if ua:
+            headers["User-Agent"] = ua
+        req = requests.get("http://api.xicidaili.com/free2016.txt", headers=headers, timeout=10)
+        """
+        req = requests.get(url="http://tvp.daxiangdaili.com/ip/?tid=557295271204258&num=1&delay=3&category=2&exclude_ports=8088,80,8080", timeout=10)
+        if req.text:
+            print("Using IP proxy:", req.text)     # req.text: "119.75.213.61:80"
+            return req.text
+        return None
+    except Exception as e:
+        print("lxw_Exception: in get_proxy_xcdl(). ", e)
+        return None
+
+
 def get_proxy_xcdl_localfile():
     try:
         with open("./xcdl_proxies_1.txt") as f:
@@ -138,4 +160,25 @@ def clean_xcdl_proxies():
         f.write("\n".join(usable_proxies))
 
 
-# clean_xcdl_proxies()
+def check_proxies():
+    success_count = 0
+    failsure_count = 0
+    for i in range(100):
+        time.sleep(10)   # 太频繁了，可能获取不到可用的代理
+        url = "http://xiujinniu.com/xiujinniu/index.php"
+        proxy = get_proxy_dxdl()
+        proxies = {
+            "http": proxy,
+            "https": proxy,
+        }
+        try:
+            response = requests.get(url=url, proxies=proxies, timeout=10)
+        except Exception as e:
+            print(e)
+            failsure_count += 1
+        else:
+            success_count += 1
+            print(response.status_code)
+
+    print(success_count, failsure_count)
+

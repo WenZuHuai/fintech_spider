@@ -41,6 +41,7 @@ from Spiders.public_utils import check_proxy_alive
 from Spiders.public_utils import get_proxy_xcdl
 from Spiders.public_utils import get_proxy_xcdl_localfile
 from Spiders.public_utils import user_agent_list
+from Spiders.public_utils import get_proxy_dxdl
 
 
 class CJOSpider():
@@ -48,7 +49,6 @@ class CJOSpider():
     w/o Scrapy.
     """
     cases_per_page = 20
-    # total_page = 1000     # the total number of pages is much bigger than 10, so I assign the initial value as 1000. # 不能太小 多线程
     stop_flag = False
 
     def post_crawl(self, index):
@@ -56,7 +56,8 @@ class CJOSpider():
         # url = "http://xiujinniu.com/xiujinniu/index.php"   # Validating Host/Referer/User-Agent/Proxy. OK.
         data = {
             # "Param": "案件类型:刑事案件,裁判年份:2004",
-            "Param": "",
+            # "Param": "案件类型:刑事案件,裁判日期:2017-04-01 TO 2017-04-01,法院层级:高级法院",
+            "Param": "裁判日期:2017-04-01 TO 2017-04-01",
             "Index": index,
             "Page": self.cases_per_page,
             "Order": "法院层级",
@@ -70,12 +71,10 @@ class CJOSpider():
             headers = {"Host": "wenshu.court.gov.cn", "Referer": "http://wenshu.court.gov.cn/List/List"}
             ua = random.choice(user_agent_list)
             if ua:
-                # print("Using User-Agent:", ua)
                 headers["User-Agent"] = ua
 
             print("headers", headers)
 
-            # req = Request("POST", url=url, data=data, headers=headers)
             req = Request("POST", url=url, data=data, headers=headers)
             prepped = s.prepare_request(req)
 
@@ -104,8 +103,17 @@ class CJOSpider():
                 response = s.send(prepped, proxies=proxies, timeout=60)    # http://blog.csdn.net/qq_18863573/article/details/52775130
             """
 
+            proxy = get_proxy_dxdl()
+            proxies = {
+                "http": proxy,
+                "https": proxy,
+            }
+            response = s.send(prepped, proxies=proxies, timeout=60)    # http://blog.csdn.net/qq_18863573/article/details/52775130
+
+            """
             # w/o proxy
             response = s.send(prepped, timeout=60)
+            """
         except Exception as e:
             print("lxw_Exception", e)
         else:
@@ -120,16 +128,11 @@ class CJOSpider():
                 self.stop_flag = True
                 return
 
-            print("Total Page:", int(text_list[0]["Count"]))
+            print("Total Count:", int(text_list[0]["Count"]))
             """
             # Count
             case_total_count = int(text_list[0]["Count"])
             quotient, remainder = divmod(case_total_count, self.cases_per_page)
-            if quotient >= self.total_page:
-                self.total_page = quotient
-                if remainder != 0:
-                    self.total_page += 1
-            # if index > self.total_page
             """
             for case_dict in text_list[1:]:
                 """
@@ -189,8 +192,7 @@ def no_use():
 
 if __name__ == "__main__":
     cjo = CJOSpider()
-    # current_page = 1
-    current_page = 100
+    current_page = 1
     while not cjo.stop_flag:
         cjo.post_crawl(current_page)
         current_page += 1
