@@ -14,6 +14,7 @@ import urllib.parse
 
 from Spiders.CJOSpider.CJOSpider.middlewares import RotateUserAgentMiddleware
 from Spiders.CJOSpider.get_proxy import get_proxy
+from Spiders.CJOSpider.CJOSpider import items
 
 
 class CJOSpider(scrapy.Spider):
@@ -165,7 +166,7 @@ class CJOSpider(scrapy.Spider):
                 while not case_dict["case_details"] and count < 5:
                     case_dict["case_details"] = self.get_detail(case_dict["文书ID"])
                     count += 1
-                self.into_mongo(case_dict)
+                yield self.into_mongo(case_dict)
 
         except json.JSONDecodeError as jde:
             if "<title>502</title>" in response.text:
@@ -229,7 +230,6 @@ class CJOSpider(scrapy.Spider):
         if ua:
             headers["User-Agent"] = ua
         try:
-            """
             # with proxy
             proxy = get_proxy()
             proxies = {"http": proxy, "https": proxy}  # NOTE: 这里"http"和"https"一定要都写，不能只写http或者是只写https
@@ -237,6 +237,7 @@ class CJOSpider(scrapy.Spider):
             """
             # w/o proxy
             req = requests.get(url=url, headers=headers, timeout=120)
+            """
 
             text = req.text
             if text:
@@ -257,7 +258,18 @@ class CJOSpider(scrapy.Spider):
 
     def into_mongo(self, case_dict):
         print(case_dict)
-        # pass
+        cjo_item = items.CjospiderItem()
+        cjo_item["abstract"] = case_dict.get("裁判要旨段原文", "")
+        cjo_item["reason_not_public"] = case_dict.get("不公开理由", "")
+        cjo_item["case_category"] = case_dict.get("案件类型", "")
+        cjo_item["judge_date"] = case_dict.get("裁判日期", "")
+        cjo_item["case_name"] = case_dict.get("案件名称", "")
+        cjo_item["doc_id"] = case_dict.get("文书ID", "")
+        cjo_item["judge_procedure"] = case_dict.get("审判程序", "")
+        cjo_item["case_num"] = case_dict.get("案号", "")
+        cjo_item["court_name"] = case_dict.get("法院名称", "")
+        cjo_item["case_details"] = case_dict.get("case_details", "")
+        return cjo_item
 
     def join_param(self, param):
         """

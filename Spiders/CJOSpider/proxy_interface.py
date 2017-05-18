@@ -64,6 +64,7 @@ class RedisClient():
             for index in range(count):
                 index = random.randint(0, self.queue_len-1)
                 proxy = self._db.lindex(DB_NAME, index).decode("utf-8")
+                print("Using IP proxy:", proxy)  # req.text: "119.75.213.61:80"
                 proxies.append(proxy)
         except ValueError as ve:
             self.logger.error("ValueError:queue_len is too short(<1).\n{0}".format(ve))

@@ -59,8 +59,8 @@ DOWNLOADER_MIDDLEWARES = {
 
     # Proxy
     # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
-    # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    # 'CJOSpider.middlewares.ProxyMiddleware': 100,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'CJOSpider.middlewares.ProxyMiddleware': 100,
 
     # PhantomJS
     # 'CJOSpider.middlewares.JavaScriptMiddleware': 543,
@@ -74,9 +74,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'CJOSpider.pipelines.CjospiderPipeline': 300,
-#}
+ITEM_PIPELINES = {
+    'CJOSpider.pipelines.CjospiderPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -98,3 +98,7 @@ DOWNLOADER_MIDDLEWARES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+MONGODB_HOST = "192.168.1.36"
+MONGODB_PORT = 27017
+MONGODB_DATABASE = "scrapy"

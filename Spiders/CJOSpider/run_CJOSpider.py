@@ -19,3 +19,7 @@ sys.path.append("/home/lxw/IT/projects/fintech_spider/Spiders/CJOSpider")
 
 # cmdline.execute(["scrapy", "crawl", "CJO_Spider", "-L", "WARNING"])
 cmdline.execute("scrapy crawl CJO_Spider -L WARNING".split())
+
+
+# redis-cli -h 192.168.1.29
+# mongo 192.168.1.36:27017
