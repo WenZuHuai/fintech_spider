@@ -12,5 +12,5 @@
 
 from scrapy import cmdline
 
-# cmdline.execute(["scrapy", "crawl", "cjo", "-L", "WARNING"])
-cmdline.execute("scrapy crawl cjo -L WARNING".split())
+# cmdline.execute(["scrapy", "crawl", "CJO_Spider", "-L", "WARNING"])
+cmdline.execute("scrapy crawl CJO_Spider -L WARNING".split())

@@ -45,7 +45,9 @@ class RedisClient():
         proxies = []
         req = requests.get(url="http://api.ip.data5u.com/dynamic/get.html?order=f305a6efa6aff38589285b8f66dd05fd", timeout=60)
         if req.text:
-            proxy = req.text.strip()
+            # proxy = req.text.strip()
+            proxy_list = req.text.strip().split("\n")   # req.text: '121.234.229.55:19739\n122.237.241.167:33923\n125.92.34.246:28653\n183.155.152.226:61394\n113.3.253.234:52948\n175.155.138.99:14135\n'
+            proxy = random.choice(proxy_list)
             print("Using IP proxy:", proxy)  # req.text: "119.75.213.61:80"
             proxies.append(proxy)
         return proxies
