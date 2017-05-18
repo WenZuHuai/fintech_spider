@@ -11,6 +11,11 @@
 
 
 from scrapy import cmdline
+import sys
+
+sys.path.append("/home/lxw/IT/projects/fintech_spider")
+sys.path.append("/home/lxw/IT/projects/fintech_spider/Spiders/CJOSpider")
+
 
 # cmdline.execute(["scrapy", "crawl", "CJO_Spider", "-L", "WARNING"])
 cmdline.execute("scrapy crawl CJO_Spider -L WARNING".split())

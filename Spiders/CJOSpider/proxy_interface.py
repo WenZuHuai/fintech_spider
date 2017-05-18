@@ -41,6 +41,7 @@ class RedisClient():
         return proxies
         """
 
+        """
         # taobao 动态代理
         proxies = []
         req = requests.get(url="http://api.ip.data5u.com/dynamic/get.html?order=f305a6efa6aff38589285b8f66dd05fd", timeout=60)
@@ -51,8 +52,9 @@ class RedisClient():
             print("Using IP proxy:", proxy)  # req.text: "119.75.213.61:80"
             proxies.append(proxy)
         return proxies
-
         """
+
+        # Get proxies from Redis
         proxies = []
         if count < 1:
             return proxies
@@ -72,7 +74,6 @@ class RedisClient():
             if len(proxies) < count:
                self.logger.warning("The requested count is larger than what we have in Redis, more proxies are needed.")
             return proxies
-        """
 
     def clean_proxies(self):
         """
