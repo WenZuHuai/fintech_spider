@@ -10,8 +10,8 @@ import requests
 
 from Spiders.CJOSpider.error import PoolEmptyError
 from Spiders.CJOSpider.settings import HOST, PORT, DB_NAME
-from Spiders.CJOSpider.utils import check_proxy_alive
 from Spiders.CJOSpider.utils import generate_logger
+from Spiders.CJOSpider.utils import check_proxy_alive
 
 
 class RedisClient():
@@ -28,12 +28,24 @@ class RedisClient():
         """
         get proxies from redis
         """
+        """
+        # daxiangdaili
         proxies = []
         req = requests.get(url="http://tvp.daxiangdaili.com/ip/?tid=557295271204258&num=10&delay=1&category=2&exclude_ports=8088,80,8080", timeout=60)
         if req.text:
             proxy_list = req.text.split("\r\n")
             proxy = random.choice(proxy_list)
             # print("Using IP proxy:", req.text)  # req.text: "119.75.213.61:80"
+            print("Using IP proxy:", proxy)  # req.text: "119.75.213.61:80"
+            proxies.append(proxy)
+        return proxies
+        """
+
+        # taobao 动态代理
+        proxies = []
+        req = requests.get(url="http://api.ip.data5u.com/dynamic/get.html?order=f305a6efa6aff38589285b8f66dd05fd", timeout=60)
+        if req.text:
+            proxy = req.text.strip()
             print("Using IP proxy:", proxy)  # req.text: "119.75.213.61:80"
             proxies.append(proxy)
         return proxies

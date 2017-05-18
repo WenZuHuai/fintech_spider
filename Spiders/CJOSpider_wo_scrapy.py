@@ -57,7 +57,7 @@ class CJOSpider():
         data = {
             # "Param": "案件类型:刑事案件,裁判年份:2004",
             # "Param": "案件类型:刑事案件,裁判日期:2017-04-01 TO 2017-04-01,法院层级:高级法院",
-            "Param": "裁判日期:2017-04-01 TO 2017-04-01",
+            "Param": "裁判日期:1996-01-10 TO 1996-01-10",   # "1996-01-10": 1, "1996-02-07": 1
             "Index": index,
             "Page": self.cases_per_page,
             "Order": "法院层级",
@@ -103,17 +103,17 @@ class CJOSpider():
                 response = s.send(prepped, proxies=proxies, timeout=60)    # http://blog.csdn.net/qq_18863573/article/details/52775130
             """
 
+            """
             proxy = get_proxy_dxdl()
             proxies = {
                 "http": proxy,
                 "https": proxy,
             }
             response = s.send(prepped, proxies=proxies, timeout=60)    # http://blog.csdn.net/qq_18863573/article/details/52775130
-
             """
+
             # w/o proxy
             response = s.send(prepped, timeout=60)
-            """
         except Exception as e:
             print("lxw_Exception", e)
         else:

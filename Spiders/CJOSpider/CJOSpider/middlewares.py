@@ -13,7 +13,7 @@ from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.http import HtmlResponse
 import time
 from selenium.webdriver.common.proxy import ProxyType
-from Spiders.CJOSpider.proxy_interface import RedisClient
+from Spiders.CJOSpider.get_proxy import get_proxy
 
 
 class RotateUserAgentMiddleware(UserAgentMiddleware):
@@ -42,7 +42,7 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"
         "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1",
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24",
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKiget_proxyt/536.5 (KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5",
         "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5",
         "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
         "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6",
@@ -102,28 +102,14 @@ class JavaScriptMiddleware(object):
 
 
 class ProxyMiddleware(object):
-    client = RedisClient()
     """
     如果不使用Selenium/PhantomJS，那么Scrapy中使用代理可以这样用
     但如果使用Selenium/PhantomJS，并且想让代理在Selenium/PhantomJS中生效则不能这样用(这样用，即使在settings.py中ProxyMiddleware具有比JavaScriptMiddleware高的优先级，代理依然无法在Selenium/PhantomJS中生效)
     """
-    def get_proxy(self):
-        proxy = None
-        try:
-            proxy = self.client.get()[0]
-        except IndexError as ie:
-            print("lxw_IndexError: No proxy available?", ie)
-        except Exception as e:
-            print("lxw_Exception", e)
-        finally:
-            return proxy
-
     # overwrite process request
     def process_request(self, request, spider):
-        # proxy_list = self.client.get()
         try:
-            proxy = self.get_proxy()
-            # print("Get an IP proxy:", proxy)
+            proxy = get_proxy()
             if proxy:
                 request.meta['proxy'] = "http://" + proxy   # "http://" is essential here.
                 request.meta['download_timeout'] = 120.0
