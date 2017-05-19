@@ -215,9 +215,11 @@ class CJOSpider(scrapy.Spider):
                     if date in digit_dict:
                         date = digit_dict[date]
                     yield "{0}-{1}-{2}".format(year, month, date)
+                    """
                     index += 1
                     if index > 12:
                         return
+                    """
                     # yield "1996-01-10"    # 1
                     # yield "1996-02-07"    # 1
                     # yield "2016-02-07"    # 4
