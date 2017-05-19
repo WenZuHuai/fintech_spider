@@ -5,3 +5,4 @@ new_three_board/new_three_board/spiders/com_code.json
 **/*.log
 demo/*.png
 **/*.png
+scripts/

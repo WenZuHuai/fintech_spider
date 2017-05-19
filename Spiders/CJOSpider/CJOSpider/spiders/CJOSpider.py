@@ -187,7 +187,9 @@ class CJOSpider(scrapy.Spider):
             # 针对这些抓取不成功的case, 重新yield进行抓取
             # yield self.re_yield(response.request.body)    # 是否好使，还需测试
             # 不用测试上面的response.request.body了，直接yield data就行
-            yield scrapy.FormRequest(url=self.url, formdata=data, callback=lambda resp: self.parse(resp, data), dont_filter=True)
+            # TODO: 增加记录哪些案例应该爬取，哪些案例爬取过了，哪些没有爬取
+            # "lxw_Exception_NOTE: 'Logger' object has no attribute 'flush'", 实际上此时已经爬取成功了，不能重新yield，这种情况要求必须要提供记录哪些案例(data即可)爬取过了，哪些没有爬取，然后重爬没有爬取到的
+            # yield scrapy.FormRequest(url=self.url, formdata=data, callback=lambda resp: self.parse(resp, data), dont_filter=True)
 
     def re_yield(self, body, next_index=False):
         body = urllib.parse.unquote_plus(body.decode("utf-8"), encoding="utf-8")

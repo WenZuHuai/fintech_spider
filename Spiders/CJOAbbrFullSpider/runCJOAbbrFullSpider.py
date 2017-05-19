@@ -14,11 +14,13 @@ from scrapy import cmdline
 import sys
 
 sys.path.append("/home/lxw/IT/projects/fintech_spider")
-sys.path.append("/home/lxw/IT/projects/fintech_spider/Spiders/CJOSpider")
+sys.path.append("/home/lxw/IT/projects/fintech_spider/Spiders/CJOAbbrFullSpider")
 
+with open("./CJOAbbrFullSpider.log", "w") as f:
+    pass
 
 # cmdline.execute(["scrapy", "crawl", "CJO_Spider", "-L", "WARNING"])
-cmdline.execute("scrapy crawl CJO_Spider -L WARNING".split())
+cmdline.execute("scrapy crawl CJOAbbrFullSpider -L WARNING".split())
 
 
 # redis-cli -h 192.168.1.29

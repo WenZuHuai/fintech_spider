@@ -30,14 +30,15 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 | Spiders/new_three_board | [lxw](https://github.com/lxw0109) | Spiders for crawling data from [全国中小企业股份转让系统](http://www.neeq.com.cn/nq/listedcompany.html) |
 
 
-### TODOs
+### TODO
 **[He Chen](https://github.com/hee0624)**:
 1. 在README.md中更新所提交的各个目录的用途(如果子目录中有关键的文件，也请列出)
 
 **[Xiaowei Liu](https://github.com/lxw0109)**:
 + **CJOSpider**
  0. 增加log
- 1. 把所有要爬取的POST的data(Param,Index,Page)写入到log中; 把正确抓取到的POST的data也写入到log中。便于后期查看哪些data没有正确抓取到，以重新进行抓取
+ 1. TODO: 增加记录哪些案例应该爬取，哪些案例爬取过了，哪些没有爬取
+    把所有要爬取的POST的data(Param,Index,Page)写入到log中; 把正确抓取到的POST的data也写入到log中。便于后期查看哪些data没有正确抓取到，以重新进行抓取
 + **NECIPSSpider**
  0. add Referer to NECIPSpider_wo_scrapy.py
  1. threadpool for NECIPSSpider_wo_scrapy.py
