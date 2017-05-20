@@ -17,15 +17,21 @@ def main():
     db = client[DATABASE]
     col = db[COLLECTION_NAME]
     count = 0
+    total_count = 0
     abbr_full_dict = {}
     for item in col.find():
+        total_count += 1
         shortname = item["company_sortname"].strip().replace(" ", "").replace("B", "").replace("Ｂ", "").replace("A", "")
         fullname = item["company_fullname"].strip().replace(" ", "")
         if shortname not in fullname:
+            if shortname in abbr_full_dict:
+                print(shortname, abbr_full_dict[shortname], fullname)
+                print(fullname==abbr_full_dict[shortname])
             abbr_full_dict[shortname] = fullname
             count += 1
-    print(abbr_full_dict)
+    # print(abbr_full_dict)
     print(count)
+    print(total_count)
 
 
 if __name__ == "__main__":
