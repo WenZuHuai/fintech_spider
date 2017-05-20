@@ -5,7 +5,7 @@
 # Date: 5/20/17 11:44 AM
 
 def main():
-    result_dict = {
+    result_dict = { # 1730 / 2 = 865
         '深房集团': 1,
         '深圳经济特区房地产(集团)股份有限公司': 0,
         '深桑达': 0,
@@ -1737,7 +1737,7 @@ def main():
         '海虹控股': 0,
         '海虹企业(控股)股份有限公司': 0
     }
-    abbr_full_dict = {
+    abbr_full_dict = { # 892
         "深房集团": "深圳经济特区房地产(集团)股份有限公司",
         "深桑达": "深圳市桑达实业股份有限公司",
         "国药一致": "国药集团一致药业股份有限公司",
@@ -2633,9 +2633,9 @@ def main():
     }
     for key, value in abbr_full_dict.items():
         if key not in result_dict:
-            print("key:", key)
+            print(key)
         if value not in result_dict:
-            print("value:", value)
+            print(value)
 
 if __name__ == "__main__":
     main()
