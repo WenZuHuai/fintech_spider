@@ -20,8 +20,8 @@ with open("./CJOAbbrFullSpider.log", "w") as f:
     pass
 
 # cmdline.execute(["scrapy", "crawl", "CJO_Spider", "-L", "WARNING"])
-cmdline.execute("scrapy crawl CJOAbbrFullSpider -L WARNING".split())
-
+# cmdline.execute("scrapy crawl CJOAbbrFullSpider -L WARNING".split())
+cmdline.execute("scrapy crawl CJOAbbrFullListSpider -L WARNING".split())
 
 # redis-cli -h 192.168.1.29
 # mongo 192.168.1.36:27017
