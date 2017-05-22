@@ -22,13 +22,16 @@ def main():
     abbr_full_dict = {}
     for item in col.find():
         total_count += 1
-        shortname = item["company_sortname"].strip().replace(" ", "").replace("B", "").replace("Ｂ", "").replace("A", "")
+        # 对于重复的公司主要是有A股的和B股之分，对于这些公司shortname和fullname是一样的，但code是不一样的(code中的股票简称也是不一样的)
+        shortname = item["company_sortname"].strip().replace(" ", "").replace("B", "").replace("Ｂ", "").replace("A", "").replace("Ａ", "")
+        # shortname = item["company_sortname"].strip().replace(" ", "")
         fullname = item["company_fullname"].strip().replace(" ", "")
         if shortname not in fullname:
             if shortname in abbr_full_dict:
-                print(shortname, abbr_full_dict[shortname], fullname)
-                print(fullname==abbr_full_dict[shortname])
+                # print(shortname, abbr_full_dict[shortname], fullname)
+                # print(shortname)
                 duplicate_count += 1
+
             abbr_full_dict[shortname] = fullname
             count += 1
     # print(abbr_full_dict)
@@ -37,8 +40,32 @@ def main():
     print(total_count)
 
 
+def get_code_abbr_full_dict():
+    client = pymongo.MongoClient(HOST, PORT)
+    db = client[DATABASE]
+    col = db[COLLECTION_NAME]
+    count = 0
+    duplicate_count = 0
+    total_count = 0
+    code_abbr_full_dict = {}
+    for item in col.find():
+        shortname = item["company_sortname"].strip().replace(" ", "").replace("B", "").replace("Ｂ", "").replace("A", "").replace("Ａ", "")
+        fullname = item["company_fullname"].strip().replace(" ", "")
+        code_abbr = item["code"].strip()
+        code_abbr = code_abbr.split()   # code_abbr: 200168 舜喆B
+        code = code_abbr[0]
+        abbr = code_abbr[1]
+        if code not in code_abbr_full_dict:
+            code_abbr_full_dict[code] = (shortname, fullname)
+        else:
+            print(code)
+    print(code_abbr_full_dict)
+    print(len(code_abbr_full_dict))
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    get_code_abbr_full_dict()
 
 
 """
@@ -50,7 +77,7 @@ if __name__ == "__main__":
 以当事人为检索条件 比全文检索结果要准确
 2. 简称和全称使用哪个作为检索内容
 1). 对于简称包含在全称内的，应使用简称进行检索
-2). 对于简称不包含在全称内的情况：使用全称作为检索内容大多数都满足，但有特例(富奥汽车零部件股份有限公司)，所以应采用全称简称都抓取然后去重的方式（并集）
+2). 对于简称不包含在全称内的情况：应采用全称简称都抓取然后去重的方式（并集）
 
 ### "工商银行" in "中国工商银行":
 1. 当事人:工商银行
@@ -137,6 +164,10 @@ Param:全文检索:中国工商银行
 
 
 """
+NOT OK: 
+2. 得到按照简称/全称还是简称全称都要爬取的dict？这个是会变化的，得到dict是不对的，只能在实际爬取的时候进行判断，并且实际上都是要爬的
+3. 按照2进行爬取，只获取count即可
+
 MEANINGLESS:
 1. 当事人:工商银行,全文检索:工商银行
 查询结果案例数: 132405

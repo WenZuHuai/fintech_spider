@@ -3,6 +3,11 @@
 # File: CJOAbbrFullListSpider.py
 # Author: lxw
 # Date: 5/20/17 10:37 PM
+# Usage:
+"""
+892家公司简称不被公司全称包含的公司，分别看以简称和全称作为当事人进行爬取所得到的案例数目
+不知道什么原因CJOAbbrFullSpider.py有些简称和全称没有爬取出来，所以手动将这部分简称和全称构造出一个left_list，然后对left_list再爬取一次
+"""
 
 import calendar
 import json

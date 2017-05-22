@@ -10,7 +10,7 @@ import os
 from Spiders.CJOAbbrFullSpider.settings import TEST_API
 
 
-logging.basicConfig(level=logging.WARNING, filemode="w")
+# logging.basicConfig(level=logging.WARNING, filemode="w")    # 加上这条语句scrapy运行就会显示warning
 
 
 def generate_logger(logger_name):

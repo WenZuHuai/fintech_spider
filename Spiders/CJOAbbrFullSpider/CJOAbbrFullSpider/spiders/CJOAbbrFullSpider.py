@@ -3,12 +3,10 @@
 # File: CJOAbbrFullSpider.py
 # Author: lxw
 # Date: 5/19/17 4:39 PM
-
-#!/usr/bin/env python3
-# coding: utf-8
-# File: CJOAbbrFullSpider.py
-# Author: lxw
-# Date: 5/11/17 3:57 PM
+# Usage:
+"""
+892家公司简称不被公司全称包含的公司，分别看以简称和全称作为当事人进行爬取所得到的案例数目
+"""
 
 import calendar
 import json
