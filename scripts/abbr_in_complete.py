@@ -17,6 +17,7 @@ def main():
     db = client[DATABASE]
     col = db[COLLECTION_NAME]
     count = 0
+    duplicate_count = 0
     total_count = 0
     abbr_full_dict = {}
     for item in col.find():
@@ -27,10 +28,12 @@ def main():
             if shortname in abbr_full_dict:
                 print(shortname, abbr_full_dict[shortname], fullname)
                 print(fullname==abbr_full_dict[shortname])
+                duplicate_count += 1
             abbr_full_dict[shortname] = fullname
             count += 1
     # print(abbr_full_dict)
     print(count)
+    print(duplicate_count)
     print(total_count)
 
 
