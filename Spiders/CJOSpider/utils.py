@@ -10,7 +10,7 @@ import os
 from Spiders.CJOSpider.settings import TEST_API
 
 
-logging.basicConfig(level=logging.WARNING, filemode="w")
+# logging.basicConfig(level=logging.WARNING, filemode="w")
 
 
 def generate_logger(logger_name):
