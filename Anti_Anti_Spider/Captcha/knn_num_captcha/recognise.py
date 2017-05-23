@@ -134,7 +134,7 @@ if __name__=='__main__':
     for pg in os.listdir('images'):
         print(pg)
         img1 = Image.open("images/{}".format(pg))
-        result=imageRecognize.recognise(img1)
-        string=[''.join(item[1]) for item in result]
+        result_abbr_full_892.md=imageRecognize.recognise(img1)
+        string=[''.join(item[1]) for item in result_abbr_full_892.md]
         print(string)
     """
