@@ -36,7 +36,7 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 
 **[Xiaowei Liu](https://github.com/lxw0109)**:
 + **CJOSpider**
- 0. 代理的请求策略改成队列的形式不要用random的形式
+ 0. 代理的请求策略改成队列的形式,不要用random的形式
  1. 增加log
  2. 增加记录哪些案例应该爬取，哪些案例爬取过了，哪些没有爬取
     把所有要爬取的POST的data(Param,Index,Page)写入到log中; 把正确抓取到的POST的data也写入到log中。便于后期查看哪些data没有正确抓取到，以重新进行抓取
