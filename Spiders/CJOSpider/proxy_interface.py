@@ -21,6 +21,8 @@ class RedisClient():
 
     def __init__(self, host=HOST, port=PORT):
         pool = redis.ConnectionPool(host=host, port=port, db=0)
+        # [redis连接对象是线程安全的](http://www.cnblogs.com/clover-siyecao/p/5600078.html)
+        # [redis是单线程的](https://stackoverflow.com/questions/17099222/are-redis-operations-on-data-structures-thread-safe)
         self._db = redis.Redis(connection_pool=pool)
         self.logger = generate_logger("RedisClient")
 
@@ -54,7 +56,8 @@ class RedisClient():
         return proxies
         """
 
-        # Get proxies from Redis
+        """
+        # Get proxies from Redis(随机产生一个IP代理，可能导致某个IP代理连续多次被访问)
         proxies = []
         if count < 1:
             return proxies
@@ -74,6 +77,28 @@ class RedisClient():
             # self.logger.info("Using proxies:{0}".format(proxies))
             if len(proxies) < count:
                self.logger.warning("The requested count is larger than what we have in Redis, more proxies are needed.")
+            return proxies
+        """
+        # Get proxies from Redis(代理的请求策略改成队列的形式,代替random的形式)
+        proxies = []
+        if count < 1:
+            return proxies
+
+        try:
+            for index in range(count):
+                proxy = self._db.lpop(DB_NAME)  # 从队列头读取出来
+                self._db.rpush(DB_NAME, proxy)  # 插入到队列尾端
+                proxy = proxy.decode("utf-8")
+                print("Using IP proxy:", proxy)  # req.text: "119.75.213.61:80"
+                proxies.append(proxy)
+        except ValueError as ve:
+            self.logger.error("ValueError:queue_len is too short(<1).\n{0}".format(ve))
+        except Exception as e:
+            self.logger.error("lxw:Unexpected Error.\n{0}".format(e))
+        finally:
+            # self.logger.info("Using proxies:{0}".format(proxies))
+            if len(proxies) < count:
+                self.logger.warning("The requested count is larger than what we have in Redis, more proxies are needed.")
             return proxies
 
     def clean_proxies(self):
