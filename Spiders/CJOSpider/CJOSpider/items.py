@@ -38,5 +38,8 @@ class CjospiderItem(scrapy.Item):
     case_num = scrapy.Field()
     court_name = scrapy.Field()
     case_details = scrapy.Field()
+    case_parties = scrapy.Field()
+    abbr_full_category = scrapy.Field()
+    crawl_date = scrapy.Field()
 
 
