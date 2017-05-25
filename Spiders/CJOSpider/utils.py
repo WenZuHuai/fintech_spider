@@ -14,15 +14,29 @@ from Spiders.CJOSpider.settings import TEST_API
 
 
 def generate_logger(logger_name):
+    """
+    # debug/error    
+    """
     my_logger = logging.getLogger(logger_name)
     file_name = os.path.join(os.getcwd(), logger_name+".log")
-    """
-    if os.path.isfile(fileName):
-        with open(fileName, "w"):
+    if os.path.isfile(file_name):
+        with open(file_name, "w"):
             pass
-    """
     fh = logging.FileHandler(file_name)
     formatter = logging.Formatter("%(levelname)s - %(asctime)s - %(message)s")
+    fh.setFormatter(formatter)
+    my_logger.addHandler(fh)
+    return my_logger
+
+
+def generate_output_logger(logger_name):
+    my_logger = logging.getLogger(logger_name)
+    file_name = os.path.join(os.getcwd(), logger_name+".md")
+    if os.path.isfile(file_name):
+        with open(file_name, "w"):
+            pass
+    fh = logging.FileHandler(file_name)
+    formatter = logging.Formatter("%(message)s")
     fh.setFormatter(formatter)
     my_logger.addHandler(fh)
     return my_logger

@@ -112,7 +112,7 @@ class ProxyMiddleware(object):
             proxy = get_proxy()
             if proxy:
                 request.meta['proxy'] = "http://" + proxy   # "http://" is essential here.
-                request.meta['download_timeout'] = 120.0
+                request.meta['download_timeout'] = 180.0
                 request.meta['retry_times'] = 3
             else:
                 print("in ProxyMiddleware.process_request(): no proxy available")

@@ -10,7 +10,7 @@ from scrapy.conf import settings
 
 
 class CjospiderPipeline(object):
-    collection_name = "cjo0524"
+    collection_name = "cjo0525"
 
     def __init__(self, mongo_uri, mongo_port, mongo_db):
         self.mongo_uri = mongo_uri

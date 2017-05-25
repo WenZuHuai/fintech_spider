@@ -35,14 +35,6 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 1. 在README.md中更新所提交的各个目录的用途(如果子目录中有关键的文件，也请列出)
 
 **[Xiaowei Liu](https://github.com/lxw0109)**:
-+ **CJOSpider**
- 1. 增加log
- 2. 增加记录哪些案例应该爬取，哪些案例爬取过了，哪些没有爬取
-    把所有要爬取的POST的data(Param,Index,Page)写入到log中; 把正确抓取到的POST的data也写入到log中。便于后期查看哪些data没有正确抓取到，以重新进行抓取
- 3. 参考CJOAbbrFullSpider/CJOAllCompanySpider.py
-    增加“当事人”字段case_parties(以股票代码code表示)
-    增加“采用简称还是全称爬取”的标识字段abbr_full_category(abbr_single: 简称in全称; abbr: 使用简称; full: 使用全称)
-    增加“爬取日期”字段crawl_date
 + **NECIPSSpider**
  0. add Referer to NECIPSpider_wo_scrapy.py
  1. threadpool for NECIPSSpider_wo_scrapy.py
