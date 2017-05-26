@@ -35,6 +35,14 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 1. 在README.md中更新所提交的各个目录的用途(如果子目录中有关键的文件，也请列出)
 
 **[Xiaowei Liu](https://github.com/lxw0109)**:
++ **CJOSpider**
+ 1. 把每页的POST请求和doc_id详情的请求分开,异步处理
+    每个案例的各个字段入mongo,并且将doc_id入redis
+    然后另一个爬虫去从redis中读取doc_id,然后爬取doc_id对应的详情, 并入mongo
+ 2. 错误两个日志文件能否自动化重跑?
+    twisted.internet.error.ConnectionRefusedError
+    twisted.internet.error.ConnectionLost
+    twisted.internet.error.TCPTimedOutError
 + **NECIPSSpider**
  0. add Referer to NECIPSpider_wo_scrapy.py
  1. threadpool for NECIPSSpider_wo_scrapy.py

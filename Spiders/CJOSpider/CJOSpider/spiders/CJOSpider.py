@@ -13,7 +13,6 @@ import requests
 import re
 import scrapy
 import time
-import urllib.parse
 
 from Spiders.CJOSpider.CJOSpider.middlewares import RotateUserAgentMiddleware
 from Spiders.CJOSpider.get_proxy import get_proxy
@@ -27,7 +26,7 @@ class CJOSpider(scrapy.Spider):
     cases_per_page = 20
     crawl_date = datetime.datetime.now().strftime("%Y-%m-%d")
     # stop_flag = False
-    CRAWL_LIMIT = 2000 # 2000  裁判文书网以POST请求的方式最多允许爬取100页（每页最多20条）；如果直接请求网页，最多请求25页（每页最多20条）
+    CRAWL_LIMIT = 2000  # 2000  裁判文书网以POST请求的方式最多允许爬取100页（每页最多20条）；如果直接请求网页，最多请求25页（每页最多20条）
     url = "http://wenshu.court.gov.cn/List/ListContent"
     # url = "http://xiujinniu.com/xiujinniu/index.php"   # Validating Host/Referer/User-Agent/Proxy. OK.
     CASE_CATEGORY = ["刑事案件", "民事案件", "行政案件", "赔偿案件", "执行案件"]    # 案件类型
@@ -41,7 +40,9 @@ class CJOSpider(scrapy.Spider):
     # code_abbr_full_dict = {'600603': ('广汇物流', '广汇物流股份有限公司')}    # OK: crawlwed 21 cases successfully.
     # 跑出了100个案例就没有结果了 # 13家公司 # code_abbr_full_dict = {'600984': ('建设机械', '陕西建设机械股份有限公司'), '300104': ('乐视网', '乐视网信息技术(北京)股份有限公司'), '600184': ('光电股份', '北方光电股份有限公司'), '601005': ('重庆钢铁', '重庆钢铁股份有限公司'), '600189': ('吉林森工', '吉林森林工业股份有限公司'), '601519': ('大智慧', '上海大智慧股份有限公司'), '300040': ('九洲电气', '哈尔滨九洲电气股份有限公司'), '600021': ('上海电力', '上海电力股份有限公司'), '002654': ('万润科技', '深圳万润科技股份有限公司'), '600662': ('强生控股', '上海强生控股股份有限公司'), '300223': ('北京君正', '北京君正集成电路股份有限公司'), '000022': ('深赤湾', '深圳赤湾港航股份有限公司'), '900939': ('汇丽股份', '上海汇丽建材股份有限公司')}
     # 9家公司 # code_abbr_full_dict = {'300104': ('乐视网', '乐视网信息技术(北京)股份有限公司'), '601519': ('大智慧', '上海大智慧股份有限公司'), '300040': ('九洲电气', '哈尔滨九洲电气股份有限公司'), '600021': ('上海电力', '上海电力股份有限公司'), '002654': ('万润科技', '深圳万润科技股份有限公司'), '600662': ('强生控股', '上海强生控股股份有限公司'), '300223': ('北京君正', '北京君正集成电路股份有限公司'), '000022': ('深赤湾', '深圳赤湾港航股份有限公司'), '900939': ('汇丽股份', '上海汇丽建材股份有限公司')}
-    code_abbr_full_dict = {'601519': ('大智慧', '上海大智慧股份有限公司')}
+    # code_abbr_full_dict = {'601519': ('大智慧', '上海大智慧股份有限公司')}
+    # code_abbr_full_dict = {'002654': ('万润科技', '深圳万润科技股份有限公司')}  # 21
+    code_abbr_full_dict = {'000533': ('万家乐', '广东万家乐股份有限公司')}   # 143
 
     DIGIT_DICT = {1: "01", 2: "02", 3: "03", 4: "04", 5: "05", 6: "06", 7: "07", 8: "08", 9: "09"}  # 月份, 只处理单个的数字即可
     # 日志记录哪些案例应该爬取，哪些案例爬取过了，从而推导出哪些没有爬取
@@ -234,7 +235,7 @@ class CJOSpider(scrapy.Spider):
                 """
                 case_dict: {'裁判要旨段原文': '本院认为，被告人王某为他人吸食毒品提供场所，其行为已构成容留他人吸毒罪，依法应予惩处。泰兴市人民检察院对被告人王某犯容留他人吸毒罪的指控成立，本院予以支持。被告人王某自动投案并如实供述自己的罪行，是自首，依法可以从轻处罚。被告人王某具有犯罪前科和多次吸毒劣迹，可酌情从重处罚。被告人王某主动向本院缴纳财产刑执行保证金，可酌情从轻处罚。关于辩护人提出“被告人王某具有自首、主动缴纳财产刑执行保证金等法定和酌定从轻处罚的情节，建议对被告人王某从轻处罚”的辩护意见，经查属实，本院予以采纳。依照《中华人民共和国刑法》第三百五十四条、第三百五十七条第一款、第六十七条第一款之规定，判决如下', '不公开理由': '', '案件类型': '1', '裁判日期': '2017-02-21', '案件名称': '王某容留他人吸毒罪一审刑事判决书', '文书ID': 'f42dfa1f-b5ca-4a22-a416-a74300f61906', '审判程序': '一审', '案号': '（2017）苏1283刑初44号', '法院名称': '江苏省泰兴市人民法院'}
                 """
-                case_dict["case_details"] = self.get_detail(case_dict["文书ID"])
+                case_dict["case_details"] = self.get_detail(case_dict["文书ID"], data)
                 count = 0
                 # 直到抓取到详细内容为止(或者重试了5次都失败了为止)， 减少数据缺失，数据缺失后期一定会重新补，更麻烦
                 while not case_dict["case_details"] and count < 5:
@@ -343,7 +344,7 @@ class CJOSpider(scrapy.Spider):
             json_data = ""
             match_result = re.finditer(r"jsonHtmlData.*?jsonData", text, re.S)
             for m in match_result:
-                print("in for cyclic body")
+                # print("in for cyclic body")
                 data = m.group(0)
                 right_index = data.rfind("}")
                 left_index = data.find("{")

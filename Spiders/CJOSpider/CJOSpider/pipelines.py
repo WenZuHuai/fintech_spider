@@ -6,23 +6,34 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 import pymongo
+import redis
 from scrapy.conf import settings
 
 
 class CjospiderPipeline(object):
     collection_name = "cjo0526"
 
-    def __init__(self, mongo_uri, mongo_port, mongo_db):
+    def __init__(self, mongo_uri, mongo_port, mongo_db, redis_uri, redis_port, redis_key):
         self.mongo_uri = mongo_uri
         self.mongo_port = mongo_port
         self.mongo_db = mongo_db
+
+        pool = redis.ConnectionPool(host=redis_uri, port=redis_port, db=0)
+        # [redis连接对象是线程安全的](http://www.cnblogs.com/clover-siyecao/p/5600078.html)
+        # [redis是单线程的](https://stackoverflow.com/questions/17099222/are-redis-operations-on-data-structures-thread-safe)
+        self.redis_uri = redis.Redis(connection_pool=pool)
+        self.redis_key = redis_key
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
             mongo_uri=crawler.settings.get("MONGODB_HOST"),
             mongo_port=crawler.settings.get("MONGODB_PORT"),
-            mongo_db=crawler.settings.get("MONGODB_DATABASE", "items")
+            mongo_db=crawler.settings.get("MONGODB_DATABASE", "items"),
+
+            redis_uri=crawler.settings.get("REDIS_HOST"),
+            redis_port=crawler.settings.get("REDIS_PORT"),
+            redis_key=crawler.settings.get("REDIS_KEY")
         )
 
     def open_spider(self, spider):
@@ -34,4 +45,5 @@ class CjospiderPipeline(object):
 
     def process_item(self, item, spider):
         self.db[self.collection_name].insert(dict(item))
+        self.redis_uri.rpush(self.redis_key, "1")
         return item
