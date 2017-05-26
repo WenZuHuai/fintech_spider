@@ -1,9 +1,0 @@
-{"Param": "当事人:建设机械", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "600984", "abbr_full_category": "abbr_single", "crawl_date": "2017-05-25"}
-{"Param": "当事人:乐视网", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "300104", "abbr_full_category": "abbr_single", "crawl_date": "2017-05-25"}
-{"Param": "当事人:光电股份", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "600184", "abbr_full_category": "abbr_single", "crawl_date": "2017-05-25"}
-{"Param": "当事人:重庆钢铁", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "601005", "abbr_full_category": "abbr_single", "crawl_date": "2017-05-25"}
-{"Param": "当事人:吉林森工", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "600189", "abbr_full_category": "abbr", "crawl_date": "2017-05-25"}
-{"Param": "当事人:吉林森林工业股份有限公司", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "600189", "abbr_full_category": "full", "crawl_date": "2017-05-25"}
-{"Param": "当事人:大智慧", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "601519", "abbr_full_category": "abbr_single", "crawl_date": "2017-05-25"}
-{"Param": "当事人:九洲电气", "Index": "1", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "300040", "abbr_full_category": "abbr_single", "crawl_date": "2017-05-25"}
-{"Param": "当事人:大智慧", "Index": "2", "Page": "20", "Order": "法院层级", "Direction": "asc", "case_parties": "601519", "abbr_full_category": "abbr_single", "crawl_date": "2017-05-25"}
