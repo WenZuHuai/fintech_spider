@@ -45,5 +45,6 @@ class CjospiderPipeline(object):
 
     def process_item(self, item, spider):
         self.db[self.collection_name].insert(dict(item))
-        self.redis_uri.rpush(self.redis_key, "1")
+        # self.redis_uri.rpush(self.redis_key, item.get("doc_id", "0"))
+        self.redis_uri.zadd(self.redis_key, item.get("doc_id", "0"), 0)
         return item

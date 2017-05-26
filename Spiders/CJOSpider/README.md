@@ -23,11 +23,14 @@ POST
 5)若4)中的"日期"超过CJOSpider.CRAWL_LIMIT，则再按照"文书类型"进行过滤("当事人"+"案件类型"+"法院层级"+"日期"+"文书类型")
 6)若5)中的"文书类型"超过CJOSpider.CRAWL_LIMIT，则再按照"审判程序"进行过滤("当事人"+"案件类型"+"法院层级"+"日期"+"文书类型"+"审判程序")
 
-
 2.针对每个案件的详细内容,需要得到当前案件的DocID,然后通过http://wenshu.court.gov.cn/CreateContentJS/CreateContentJS.aspx?DocID=69f56346-9ac8-4361-bdd9-8a1a40918234获取网页的内容即可(GET)
-
 Referer:http://wenshu.court.gov.cn/List/List?sorttype=1&conditions=searchWord+1+AJLX++%E6%A1%88%E4%BB%B6%E7%B1%BB%E5%9E%8B:%E5%88%91%E4%BA%8B%E6%A1%88%E4%BB%B6
 
+
+需要注意的是处理过程:
+把每页的POST请求和doc_id详情的请求分开,异步处理
+每个案例的各个字段入mongo,并且将doc_id入redis
+然后另一个爬虫去从redis中读取doc_id,然后爬取doc_id对应的详情, 并入另一个mongo
 
 ### 其他说明
 1."案件类型"分类：
