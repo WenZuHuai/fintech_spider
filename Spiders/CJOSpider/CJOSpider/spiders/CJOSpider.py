@@ -10,6 +10,7 @@ import datetime
 import json
 import random
 import requests
+import re
 import scrapy
 import time
 import urllib.parse
@@ -237,7 +238,7 @@ class CJOSpider(scrapy.Spider):
                 count = 0
                 # 直到抓取到详细内容为止(或者重试了5次都失败了为止)， 减少数据缺失，数据缺失后期一定会重新补，更麻烦
                 while not case_dict["case_details"] and count < 5:
-                    case_dict["case_details"] = self.get_detail(case_dict["文书ID"])
+                    case_dict["case_details"] = self.get_detail(case_dict["文书ID"], data)
                     count += 1
                 case_dict["case_parties"] = data["case_parties"]
                 case_dict["abbr_full_category"] = data["abbr_full_category"]
@@ -322,7 +323,7 @@ class CJOSpider(scrapy.Spider):
                 # yield "1996-02-07"    # 1
                 # yield "2016-02-07"    # 4
 
-    def get_detail(self, doc_id):
+    def get_detail(self, doc_id, data):
         url = "http://wenshu.court.gov.cn/CreateContentJS/CreateContentJS.aspx?DocID=" + doc_id
         # url = "http://xiujinniu.com/xiujinniu/index.php"
         headers = {"Host": "wenshu.court.gov.cn", "Referer": url}
@@ -333,13 +334,14 @@ class CJOSpider(scrapy.Spider):
             # with proxy
             proxy = get_proxy()
             proxies = {"http": proxy, "https": proxy}  # NOTE: 这里"http"和"https"一定要都写，不能只写http或者是只写https
-            req = requests.get(url=url, headers=headers, proxies=proxies, timeout=120)
+            req = requests.get(url=url, headers=headers, proxies=proxies, timeout=180)
             """
             # w/o proxy
-            req = requests.get(url=url, headers=headers, timeout=120)
+            req = requests.get(url=url, headers=headers, timeout=180)
             """
 
             text = req.text
+            result = re.find(r"jsonHtmlData(.*?)jsonData")
             if text:
                 index = text.index('{')  # $(function() {\r\n    var jsonHtmlData = "{\\"Title\\":...
                 text = text[index + 1:]  # \r\n    var jsonHtmlData = "{\\"Title\\":...
@@ -354,7 +356,7 @@ class CJOSpider(scrapy.Spider):
                 # text_dict = json.loads(text_str)
             return text
         except Exception as e:
-            self.error_logger.error("in get_detail(): {0}".format(e))
+            self.error_logger.error("in get_detail(): {0}. data:{1}".format(e, data))
             return ""
 
     def into_mongo(self, case_dict):
