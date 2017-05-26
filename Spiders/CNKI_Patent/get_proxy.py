@@ -1,0 +1,1 @@
+/home/lxw/IT/projects/fintech_spider/Spiders/CJOSpider/get_proxy.py

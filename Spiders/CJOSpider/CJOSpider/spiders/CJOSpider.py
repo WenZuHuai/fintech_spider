@@ -339,9 +339,18 @@ class CJOSpider(scrapy.Spider):
             # w/o proxy
             req = requests.get(url=url, headers=headers, timeout=180)
             """
-
             text = req.text
-            result = re.find(r"jsonHtmlData(.*?)jsonData")
+            json_data = ""
+            match_result = re.finditer(r"jsonHtmlData.*?jsonData", text, re.S)
+            for m in match_result:
+                print("in for cyclic body")
+                data = m.group(0)
+                right_index = data.rfind("}")
+                left_index = data.find("{")
+                json_data = data[left_index + 1:right_index]
+                break  # this is essential. Only the first match is what we want.
+            return "\"{" + json_data + "}\""
+            """            
             if text:
                 index = text.index('{')  # $(function() {\r\n    var jsonHtmlData = "{\\"Title\\":...
                 text = text[index + 1:]  # \r\n    var jsonHtmlData = "{\\"Title\\":...
@@ -355,6 +364,7 @@ class CJOSpider(scrapy.Spider):
                 # text_str = json.loads(text)
                 # text_dict = json.loads(text_str)
             return text
+            """
         except Exception as e:
             self.error_logger.error("in get_detail(): {0}. data:{1}".format(e, data))
             return ""
