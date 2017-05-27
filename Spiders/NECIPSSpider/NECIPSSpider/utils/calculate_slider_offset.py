@@ -70,7 +70,8 @@ def calculate_slider_offset(img0, img1):
 
 def get_search_page(search_text):
     url = "http://www.gsxt.gov.cn/index.html"
-    driver = webdriver.Chrome("/home/hee/driver/chromedriver")
+    # driver = webdriver.Chrome("/home/hee/driver/chromedriver")
+    driver = webdriver.Chrome("E:\\virtualenv\\chromedriver.exe")
     driver.get(url)
     wait = WebDriverWait(driver, 20)
     element = wait.until(EC.presence_of_element_located((By.ID, "keyword")))
