@@ -21,7 +21,7 @@ class CjospiderItem(scrapy.Item):
     '审判程序': '一审',
     '案号': $（1996）阿民初字第16号',
     '法院名称': '阿克塞哈萨克族自治县人民法院',
-    'case_details': '"{\\"Title\\":\$
+    # 'case_details': '"{\\"Title\\":\$
 "褚海英与党旭向石棉买卖纠纷一审民事判决书\\",
     \\"PubDate\\": \\"2017-02-23\\",
     \\"Html\\": \\"<atype=\'d$r\'name=\'WBSB\'></a><divstyle=\'TEXT-ALIGN: center;LINE-HEIGHT: 25pt;MARGIN: 0.5pt0cm;F[
@@ -37,7 +37,7 @@ class CjospiderItem(scrapy.Item):
     judge_procedure = scrapy.Field()    # 7.审判程序
     case_num = scrapy.Field()   # 8.案号
     court_name = scrapy.Field() # 9.法院名称
-    case_details = scrapy.Field()   # 10.案件详细内容
+    # case_details = scrapy.Field()   # 10.案件详细内容
     case_parties = scrapy.Field()   # 11.当事人
     abbr_full_category = scrapy.Field() # 12.采用简称还是全称爬取 (标识字段)
     crawl_date = scrapy.Field()     # 13.爬取日期

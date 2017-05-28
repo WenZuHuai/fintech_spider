@@ -61,3 +61,13 @@ def check_proxy_alive(proxy):
         # print("Bad Proxy", proxy)
         return False
 
+
+def join_param(param):
+    """
+    :param param: type(param) dict
+    :return: str
+    """
+    str_list = []
+    for key, value in param.items():
+        str_list.append("{0}:{1}".format(key, value))
+    return ",".join(str_list)

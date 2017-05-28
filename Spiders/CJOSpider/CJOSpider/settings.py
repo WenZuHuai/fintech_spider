@@ -59,8 +59,8 @@ DOWNLOADER_MIDDLEWARES = {
 
     # Proxy
     # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'CJOSpider.middlewares.ProxyMiddleware': 100,
+    # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    # 'CJOSpider.middlewares.ProxyMiddleware': 100,
 
     # PhantomJS
     # 'CJOSpider.middlewares.JavaScriptMiddleware': 543,
@@ -99,10 +99,12 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-MONGODB_HOST = "192.168.1.36"
+# MONGODB_HOST = "192.168.1.36"
+MONGODB_HOST = "127.0.0.1"
 MONGODB_PORT = 27017
 MONGODB_DATABASE = "scrapy"
 
-REDIS_HOST = "192.168.1.29"
+# REDIS_HOST = "192.168.1.29"
+REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
-REDIS_KEY = "DOC_ID_ZSET"
+REDIS_KEY = "DOC_ID_HASH"
