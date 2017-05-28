@@ -28,6 +28,9 @@ class InitTasksHash:
         # 9家公司(9=7+2) 7 + 2 * 2 = 11
         code_abbr_full_dict = {'300104': ('乐视网', '乐视网信息技术(北京)股份有限公司'), '601519': ('大智慧', '上海大智慧股份有限公司'), '300040': ('九洲电气', '哈尔滨九洲电气股份有限公司'), '600021': ('上海电力', '上海电力股份有限公司'), '002654': ('万润科技', '深圳万润科技股份有限公司'), '600662': ('强生控股', '上海强生控股股份有限公司'), '300223': ('北京君正', '北京君正集成电路股份有限公司'), '000022': ('深赤湾', '深圳赤湾港航股份有限公司'), '900939': ('汇丽股份', '上海汇丽建材股份有限公司')}
 
+        count_abbr_single = 0
+        count_abbr_full = 0
+
         for code, abbr_full in code_abbr_full_dict.items():
             abbr, full = abbr_full
             param = {"当事人": abbr}
@@ -35,12 +38,16 @@ class InitTasksHash:
             if abbr in full:
                 # 对于简称包含在全称内的，应使用简称进行检索
                 self.into_redis(param_str, 1, code, "abbr_single")
+                count_abbr_single += 1
             else:
                 # 对于简称不包含在全称内的情况：应采用全称简称都抓取然后去重的方式（并集）
                 self.into_redis(param_str, 1, code, "abbr")
                 param["当事人"] = full
                 param_str = join_param(param)
                 self.into_redis(param_str, 1, code, "full")
+                count_abbr_full += 1
+        print(count_abbr_single)
+        print(count_abbr_full)
 
     def get_redis_uri(self):
         pool = redis.ConnectionPool(host=self.REDIS_HOST, port=self.REDIS_PORT, db=0)

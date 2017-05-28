@@ -37,10 +37,29 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 
 **[Xiaowei Liu](https://github.com/lxw0109)**:
 + **CJOSpider**
- 1. 错误两个日志文件能否自动化重跑?
-    twisted.internet.error.ConnectionRefusedError
-    twisted.internet.error.ConnectionLost
-    twisted.internet.error.TCPTimedOutError
+ 1. 从Redis中读取Request的data, yield Request
+    """
+    redis_key: TASKS_HASH
+    0: 初始值, 未爬取
+    -1: 爬取成功
+    > 0: 未爬取成功, 爬取的次数
+    """
+    等于-1的不yield
+ 2. 按照纸上的内容, 修改parse()中的处理逻辑
+ 3. 增加对Redis中DOC_ID_HASH的爬取代码
+
+
+本地和线上区别,修改的地方
+settings.py:
+1. 启用proxy
+2. MONGO_HOST
+3. REDIS_HOST
+
+init_tasks_hash_CJOSpider.py
+REDIS_HOST
+
+
+
 + **NECIPSSpider**
  0. add Referer to NECIPSpider_wo_scrapy.py
  1. threadpool for NECIPSSpider_wo_scrapy.py
