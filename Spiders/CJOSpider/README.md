@@ -34,7 +34,12 @@ Referer:http://wenshu.court.gov.cn/List/List?sorttype=1&conditions=searchWord+1+
 ### 架构设计
 把每页的POST请求和doc_id详情的请求分开,异步处理  
 每个案例的各个字段入mongo,并且将doc_id入redis  
-然后另一个爬虫去从redis中读取doc_id,然后爬取doc_id对应的详情, 并入另一个mongo  
+然后另一个爬虫去从redis中读取doc_id,然后爬取doc_id对应的详情, 并入另一个mongo
+
+把TASKS_HASH标识为完成[self.REDIS_URI.hset(self.REDIS_KEY, redis_data_str, -1)]的情况:
+1. [抓取完成]count == 0, 后续无需再抓取
+2. [抓取完成]无效抓取 count > CRAWL_LIMIT,需要添加新的过滤条件
+3. [抓取完成] 正确抓取到所需要的数据
 
 ### 其他说明
 1."案件类型"分类  
