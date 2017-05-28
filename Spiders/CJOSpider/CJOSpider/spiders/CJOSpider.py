@@ -101,7 +101,7 @@ class CJOSpider(scrapy.Spider):
         self.should_output_logger.info(json.dumps(data, ensure_ascii=False))    # 记录所有应该抓取到的
         return scrapy.FormRequest(url=self.url, formdata=post_data,
                                   callback=lambda response: self.parse(response, data),
-                                  dont_filter=True)  # 关闭URL去重(有些url请求不成功，需要重新yield。如果打开URL去重, 这些请求无法成功?)
+                                  dont_filter=True)  # TODO: 关闭URL去重(有些url请求不成功，需要重新yield。如果打开URL去重, 这些请求无法成功?)
         # return scrapy.FormRequest(url=self.url, formdata=data, callback=self.parse, dont_filter=True, meta={"dont_redirect": True})   # 不要禁用redirect，否则重定向到502页面的request就无法到parse了
         # yield scrapy.Request(url, method="POST", body=json.dumps(data), callback=self.parse)  # Not-working
 

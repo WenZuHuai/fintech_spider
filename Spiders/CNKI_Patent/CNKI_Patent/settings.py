@@ -19,7 +19,7 @@ NEWSPIDER_MODULE = 'CNKI_Patent.spiders'
 #USER_AGENT = 'CNKI_Patent (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -33,7 +33,8 @@ ROBOTSTXT_OBEY = True
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = True
+COOKIES_DEBUG = True
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -52,9 +53,19 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'CNKI_Patent.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    # User-Agent
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'CNKI_Patent.middlewares.RotateUserAgentMiddleware': 540,   # NOTE: this value must be smaller(higher priority) than PhantomJS's priority valuea(JavaScriptMiddleware: 543), otherwise User-Agent will NOT work.
+
+    # Proxy
+    # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
+    # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    # 'CNKI_Patent.middlewares.ProxyMiddleware': 100,
+
+    # PhantomJS
+    # 'CJOSpider.middlewares.JavaScriptMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
