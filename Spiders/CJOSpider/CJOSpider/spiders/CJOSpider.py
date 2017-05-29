@@ -74,7 +74,7 @@ class CJOSpider(scrapy.Spider):
         self.REDIS_URI = self.get_redis_uri()
         count = 0
         continue_flag = True
-        while continue_flag:
+        while continue_flag: # 不能这样,这样有问题,会一直重复发多次请求, 直到收到响应为止; 导致重复请求了很多次,也重复处理了很多次请求, 
             continue_flag = False
             count += 1
             print("进入次数:", count)
@@ -84,9 +84,10 @@ class CJOSpider(scrapy.Spider):
                 if flag_code != -1:
                     continue_flag = True
                     # {0: 初始值, 未爬取, -1: 爬取成功, > 0: 未爬取成功, 爬取的次数} 等于-1的不yield
-                    data_dict = json.loads(item[0].decode("utf-8"))
+                    data_dict_str = item[0].decode("utf-8")
+                    data_dict = json.loads(data_dict_str)
+                    self.REDIS_URI.hset(self.REDIS_KEY, data_dict_str, flag_code+1)
                     yield self.yield_formrequest(data_dict["Param"], int(data_dict["Index"]), data_dict["case_parties"], data_dict["abbr_full_category"])
-
 
     def yield_formrequest(self, param, index, code, category):
         """
@@ -138,7 +139,7 @@ class CJOSpider(scrapy.Spider):
 
         # name = json.dumps(data, ensure_ascii=False)   # utf-8
         name = json.dumps(data)  # unicode
-        print(name)
+        print("into Redis, data: ", name)
         self.REDIS_URI.hset(self.REDIS_KEY, name, 0)
         """
         redis_key: TASKS_HASH
