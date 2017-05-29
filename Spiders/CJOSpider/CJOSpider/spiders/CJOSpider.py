@@ -74,7 +74,9 @@ class CJOSpider(scrapy.Spider):
         self.REDIS_URI = self.get_redis_uri()
         count = 0
         continue_flag = True
-        while continue_flag: # 不能这样,这样有问题,会一直重复发多次请求, 直到收到响应为止; 导致重复请求了很多次,也重复处理了很多次请求, 
+        while continue_flag:
+            # 不能这样,这样有问题,会一直重复发多次请求, 直到收到响应为止; 导致重复请求了很多次,也重复处理了很多次请求,
+            # 因此,增加为两个队列? 新请求队列和旧请求队列?
             continue_flag = False
             count += 1
             print("进入次数:", count)
