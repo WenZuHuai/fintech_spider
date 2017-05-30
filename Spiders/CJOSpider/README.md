@@ -32,14 +32,10 @@ Referer:http://wenshu.court.gov.cn/List/List?sorttype=1&conditions=searchWord+1+
 
 
 ### 架构设计
-把每页的POST请求和doc_id详情的请求分开,异步处理  
+把每页的POST请求和doc_id详情的请求分开, 异步处理, 这样能够显著提高爬取的效率
 每个案例的各个字段入mongo,并且将doc_id入redis  
 然后另一个爬虫去从redis中读取doc_id,然后爬取doc_id对应的详情, 并入另一个mongo
 
-把TASKS_HASH标识为完成[self.REDIS_URI.hset(self.REDIS_KEY, redis_data_str, -1)]的情况:
-1. [抓取完成]count == 0, 后续无需再抓取
-2. [抓取完成]无效抓取 count > CRAWL_LIMIT,需要添加新的过滤条件
-3. [抓取完成] 正确抓取到所需要的数据
 
 ### 其他说明
 1."案件类型"分类  
@@ -47,4 +43,17 @@ Referer:http://wenshu.court.gov.cn/List/List?sorttype=1&conditions=searchWord+1+
 民事案件: 2  
 行政案件: 3  
 赔偿案件: 4  
-执行案件: 5  
+执行案件: 5
+
+2. self.REDIS_URI.hset(self.REDIS_KEY, redis_data_str, flag_code)
+self.REDIS_KEY: TASKS_HASH
+TASKS_HASH中flag_code字段值说明: flag_code格式为left_right
+left:
+0: 初始值
+>=1: 重试的次数(多次请求失败,重复请求的次数)
+-1: 请求成功,成功抓取到不小于1个案例
+-2: 请求成功,抓取到0个案例(请求对应的案例数为0)
+-3: 请求成功,无效抓取 count > CRAWL_LIMIT,需要添加新的过滤条件
+right:
+0: 初始值, 当前请求还没有真正的发出去
+timestamp: 当前请求最近一次真正发出去的时间

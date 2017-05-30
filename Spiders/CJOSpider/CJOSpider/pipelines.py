@@ -33,7 +33,7 @@ class CjospiderPipeline(object):
 
             redis_uri=crawler.settings.get("REDIS_HOST"),
             redis_port=crawler.settings.get("REDIS_PORT"),
-            redis_key=crawler.settings.get("REDIS_KEY")
+            redis_key=crawler.settings.get("REDIS_KEY_DOC_ID")
         )
 
     def open_spider(self, spider):

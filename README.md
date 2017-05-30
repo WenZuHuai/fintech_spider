@@ -47,9 +47,8 @@ settings.py:
 1. 启用proxy
 2. MONGO_HOST
 3. REDIS_HOST
-
 init_tasks_hash_CJOSpider.py
-REDIS_HOST
+1. REDIS_HOST
 
 
 

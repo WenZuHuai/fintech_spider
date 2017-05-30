@@ -5,6 +5,7 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+import copy
 import random
 import requests
 from selenium import webdriver
@@ -14,9 +15,15 @@ from scrapy.http import HtmlResponse
 import time
 from selenium.webdriver.common.proxy import ProxyType
 from Spiders.CJOSpider.get_proxy import get_proxy
+from Spiders.CJOSpider.utils import get_redis_uri
+from Spiders.CJOSpider.CJOSpider.settings import REDIS_HOST
+from Spiders.CJOSpider.CJOSpider.settings import REDIS_PORT
+from Spiders.CJOSpider.CJOSpider.settings import REDIS_KEY_TASKS
 
 
 class RotateUserAgentMiddleware(UserAgentMiddleware):
+    REDIS_URI = get_redis_uri(REDIS_HOST, REDIS_PORT)
+
     def __init__(self, user_agent=''):
         self.user_agent = user_agent
 
@@ -24,6 +31,17 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         ua = random.choice(self.user_agent_list)
         if ua:
             request.headers.setdefault('User-Agent', ua)
+        # 按照scrapy的架构图, 只有当请求真正发出去时(不是yield在scrapy的队列中等待)才会进入到DOWNLOADER_MIDDLEWARES中的各个MIDDLEWARE
+        # 当请求真正发出去时, 将TASKS_HASH中的数据修改为当前的时间戳
+        # meta_data = copy.deepcopy(request.meta)
+        meta_data = request.meta
+        print(meta_data["item"])
+        self.REDIS_URI.hset(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"], "{0}_{1}".format(int(meta_data["item"]["flag_code"])+1, int(time.time())))
+        print(self.REDIS_URI.hget(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"]))
+        del meta_data["item"]
+        # print(request.meta)
+        # request.replace(meta=meta_data)   # OK.
+        # print(request.meta)
 
     # the default user_agent_list composes chrome,I E,firefox,Mozilla,opera,netscape
     # for more user agent strings,you can find it in http://www.useragentstring.com/pages/useragentstring.php
@@ -104,8 +122,8 @@ class ProxyMiddleware(object):
             proxy = get_proxy()
             if proxy:
                 request.meta['proxy'] = "http://" + proxy   # "http://" is essential here.
-                request.meta['download_timeout'] = 180.0
-                request.meta['retry_times'] = 3
+                request.meta['download_timeout'] = 120.0
+                request.meta['retry_times'] = 2
             else:
                 print("in ProxyMiddleware.process_request(): no proxy available")
         except Exception as e:

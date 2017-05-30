@@ -6,8 +6,8 @@
 
 # Redis数据库的地址和端口
 # HOST = "192.168.1.36"
-HOST = "192.168.1.29"
-PORT = 6379
+HOST_PROXY = "192.168.1.29"
+PORT_PROXY = 6379
 
 # HOST = "101.201.102.233"
 # PORT = 63679
@@ -28,4 +28,4 @@ TEST_API = "http://www.baidu.com/"
 # VALID_CHECK_CYCLE = 60
 # POOL_LEN_CHECK_CYCLE = 20
 
-DB_NAME = "IPPool"
+DB_NAME_PROXY = "IPPool"

@@ -5,6 +5,7 @@
 # Date: 4/26/17 2:57 PM
 
 import logging
+import redis
 import requests
 import os
 from Spiders.CJOSpider.settings import TEST_API
@@ -71,3 +72,11 @@ def join_param(param):
     for key, value in param.items():
         str_list.append("{0}:{1}".format(key, value))
     return ",".join(str_list)
+
+
+def get_redis_uri(REDIS_HOST, REDIS_PORT):
+    pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, db=0)
+    # [redis连接对象是线程安全的](http://www.cnblogs.com/clover-siyecao/p/5600078.html)
+    # [redis是单线程的](https://stackoverflow.com/questions/17099222/are-redis-operations-on-data-structures-thread-safe)
+    return redis.Redis(connection_pool=pool)
+

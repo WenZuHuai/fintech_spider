@@ -43,3 +43,10 @@ class CjospiderItem(scrapy.Item):
     crawl_date = scrapy.Field()     # 13.爬取日期
 
 
+class CjoMiddlewareItem(scrapy.Item):
+    """
+    Transport data from request to middlewares.
+    """
+    # Middlewares.py. self.REDIS_URI.hset(REDIS_KEY_TASKS, data_dict_str, "{0}_{1}".format(flag_code+1, "timestamp"))
+    data_dict_str = scrapy.Field()    # the "name" in TASKS_HASH(Redis)
+    flag_code = scrapy.Field()

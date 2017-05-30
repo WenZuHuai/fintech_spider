@@ -9,7 +9,7 @@ import redis
 import requests
 
 from Spiders.CJOSpider.error import PoolEmptyError
-from Spiders.CJOSpider.settings import HOST, PORT, DB_NAME
+from Spiders.CJOSpider.settings import HOST_PROXY, PORT_PROXY, DB_NAME_PROXY
 from Spiders.CJOSpider.utils import generate_logger
 from Spiders.CJOSpider.utils import check_proxy_alive
 
@@ -19,7 +19,7 @@ class RedisClient():
     By now, only (a) random IP proxy(s) from the proxy-pool is/are provided.
     """
 
-    def __init__(self, host=HOST, port=PORT):
+    def __init__(self, host=HOST_PROXY, port=PORT_PROXY):
         pool = redis.ConnectionPool(host=host, port=port, db=0)
         # [redis连接对象是线程安全的](http://www.cnblogs.com/clover-siyecao/p/5600078.html)
         # [redis是单线程的](https://stackoverflow.com/questions/17099222/are-redis-operations-on-data-structures-thread-safe)
@@ -86,8 +86,8 @@ class RedisClient():
 
         try:
             for index in range(count):
-                proxy = self._db.lpop(DB_NAME)  # 从队列头读取出来
-                self._db.rpush(DB_NAME, proxy)  # 插入到队列尾端
+                proxy = self._db.lpop(DB_NAME_PROXY)  # 从队列头读取出来
+                self._db.rpush(DB_NAME_PROXY, proxy)  # 插入到队列尾端
                 proxy = proxy.decode("utf-8")
                 print("Using IP proxy:", proxy)  # req.text: "119.75.213.61:80"
                 proxies.append(proxy)
@@ -105,13 +105,13 @@ class RedisClient():
         """
         Test whether the proxies in Redis is usable, and remove the useless proxies.
         """
-        proxies = self._db.lrange(DB_NAME, 0, -1)
+        proxies = self._db.lrange(DB_NAME_PROXY, 0, -1)
         for proxy in proxies:
             if not isinstance(proxy, str):
                 proxy = proxy.decode("utf-8")
             if not check_proxy_alive(proxy):
                 self.logger.info("Remove useless proxy:{0} Current number of proxy available is:{1}".format(proxy, self.queue_len))
-                self._db.lrem(DB_NAME, proxy, 0)
+                self._db.lrem(DB_NAME_PROXY, proxy, 0)
 
     def put(self, proxy):
         """
@@ -119,7 +119,7 @@ class RedisClient():
         # zset
         self._db.zadd("proxy_zset", proxy, self._INITIAL_SCORE)
         """
-        self._db.rpush(DB_NAME, proxy)  # list
+        self._db.rpush(DB_NAME_PROXY, proxy)  # list
 
     def pop(self):
         """
@@ -128,7 +128,7 @@ class RedisClient():
         # list
         try:
             # 移除列表的右侧第一个元素，并返回值右侧第一个元素
-            return self._db.rpop(DB_NAME).decode('utf-8')  # return unicode('str' in Python3)
+            return self._db.rpop(DB_NAME_PROXY).decode('utf-8')  # return unicode('str' in Python3)
         except:
             raise PoolEmptyError
 
@@ -137,20 +137,20 @@ class RedisClient():
         """
         get length from queue.
         """
-        return self._db.llen(DB_NAME)
+        return self._db.llen(DB_NAME_PROXY)
 
     def showall(self):
         """
         show all elements in the list.
         """
         #print(self._db.lrange(DB_NAME, 0, -1))
-        self.logger.info(repr(self._db.lrange(DB_NAME, 0, -1)))
+        self.logger.info(repr(self._db.lrange(DB_NAME_PROXY, 0, -1)))
 
     def del_all_proxies(self):
         """
         delete all the proxies in DB_NAME
         """
-        self._db.delete(DB_NAME)
+        self._db.delete(DB_NAME_PROXY)
 
 
     def flush(self):
