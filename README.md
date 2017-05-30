@@ -25,6 +25,7 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 | Spiders/CJOSpider | [lxw](https://github.com/lxw0109) | (w/ scrapy)Spiders for crawling data from [中国裁判文书网](http://wenshu.court.gov.cn/)(China Judgements Online) |
 | Spiders/CJOSpider_wo_scrapy.py | [lxw](https://github.com/lxw0109) | (w/o scrapy)Spiders for crawling data from [中国裁判文书网](http://wenshu.court.gov.cn/)(China Judgements Online) |
 | Spiders/CninfoSpider | [hee](https://github.com/hee0624) | Spiders for crawling data from [巨潮资讯](http://www.cninfo.com.cn/cninfo-new/information/companylist) |
+| Spiders/CNKI_Patent | [lxw](https://github.com/lxw0109) | Spiders for crawling the patent data from [中国知网](http://kns.cnki.net/kns/brief/default_result.aspx) |
 | Spiders/NECIPSSpider | [lxw](https://github.com/lxw0109) | Spiders for crawling data from [国家企业信用信息公示系统](http://www.gsxt.gov.cn/corp-query-homepage.html)(National Enterprise Credit Information Publicity System) |
 | Spiders/NECIPSSpider_wo_scrapy.py | [lxw](https://github.com/lxw0109) | Spiders(w/o Scrapy) for crawling data from [国家企业信用信息公示系统](http://www.gsxt.gov.cn/corp-query-homepage.html)(National Enterprise Credit Information Publicity System) |
 | Spiders/new_three_board | [lxw](https://github.com/lxw0109) | Spiders for crawling data from [全国中小企业股份转让系统](http://www.neeq.com.cn/nq/listedcompany.html) |
@@ -36,10 +37,21 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 
 **[Xiaowei Liu](https://github.com/lxw0109)**:
 + **CJOSpider**
- 1. 错误两个日志文件能否自动化重跑?
-    twisted.internet.error.ConnectionRefusedError
-    twisted.internet.error.ConnectionLost
-    twisted.internet.error.TCPTimedOutError
+ 0. 爬取次数记录
+ 1. 部署到线上,跑全部公司的数据
+ 1. 增加对Redis中DOC_ID_HASH的爬取代码
+
+
+本地和线上区别,修改的地方
+settings.py:
+1. 启用proxy
+2. MONGO_HOST
+3. REDIS_HOST
+init_tasks_hash_CJOSpider.py
+1. REDIS_HOST
+
+
+
 + **NECIPSSpider**
  0. add Referer to NECIPSpider_wo_scrapy.py
  1. threadpool for NECIPSSpider_wo_scrapy.py

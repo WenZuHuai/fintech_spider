@@ -7,6 +7,7 @@
 # Supporting:
 # 1. User-Agent
 # 2. IP Proxy(API: http://datazhiyuan.com:60001/plain)
+# 3. Redis(As message Queue)/MongoDB(As database)
 
 
 import json
