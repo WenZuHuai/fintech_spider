@@ -36,6 +36,11 @@ Referer:http://wenshu.court.gov.cn/List/List?sorttype=1&conditions=searchWord+1+
 每个案例的各个字段入mongo,并且将doc_id入redis  
 然后另一个爬虫去从redis中读取doc_id,然后爬取doc_id对应的详情, 并入另一个mongo
 
+使用这种架构,速度提升16倍(2条/每分钟 -> 33条/分钟)
+瓶颈主要在两点:
+1. "裁判文书网"本身响应速度慢, 使得抓取速度只能依靠多线程来提速(多线程受限于IP代理的个数)
+2. IP代理的个数只有6个,线程数目最多只能6个
+
 
 ### 其他说明
 1."案件类型"分类  
@@ -57,3 +62,9 @@ left:
 right:
 0: 初始值, 当前请求还没有真正的发出去
 timestamp: 当前请求最近一次真正发出去的时间
+
+3. DOC_ID_HASH字段说明:
+redis_key: DOC_ID_HASH
+0: 初始值, 未爬取
+-1: 爬取成功
+> 0: 上次爬取的时间戳
