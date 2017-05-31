@@ -37,20 +37,7 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 
 **[Xiaowei Liu](https://github.com/lxw0109)**:
 + **CJOSpider**
- 0. 爬取次数记录
- 1. 部署到线上,跑全部公司的数据
- 1. 增加对Redis中DOC_ID_HASH的爬取代码
-
-
-本地和线上区别,修改的地方
-settings.py:
-1. 启用proxy
-2. MONGO_HOST
-3. REDIS_HOST
-init_tasks_hash_CJOSpider.py
-1. REDIS_HOST
-
-
+ 0. 增加对Redis中DOC_ID_HASH的爬取代码
 
 + **NECIPSSpider**
  0. add Referer to NECIPSpider_wo_scrapy.py
