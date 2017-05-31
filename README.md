@@ -38,6 +38,8 @@ The data crawled by "**fintech_spider**" has been used by [嗅金牛](http://xiu
 **[Xiaowei Liu](https://github.com/lxw0109)**:
 + **CJOSpider**
  0. 增加对Redis中DOC_ID_HASH的爬取代码
+ 1. 增加对Redis中TASKS_HASH没有爬取结束任务的爬取代码(一定小于CONCURRENT_REQUESTS个?)
+ 2. 增加对Redis中DOC_ID_HASH没有爬取结束任务的爬取代码? 这个需要吗?
 
 + **NECIPSSpider**
  0. add Referer to NECIPSpider_wo_scrapy.py
