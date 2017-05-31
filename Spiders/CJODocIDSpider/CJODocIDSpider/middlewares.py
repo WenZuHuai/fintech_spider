@@ -30,14 +30,12 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         # 按照scrapy的架构图, 只有当请求真正发出去时(不是yield在scrapy的队列中等待)才会进入到DOWNLOADER_MIDDLEWARES中的各个MIDDLEWARE
         # 当请求真正发出去时, 将DOC_ID_HASH中的数据修改为当前的时间戳
         try:
-            meta_data = copy.deepcopy(request.meta)
-            # meta_data = request.meta
-            # print(meta_data["item"])
+            meta_data = request.meta
             timestamp = int(time.time())
             self.REDIS_URI.hset(REDIS_KEY_DOC_ID, meta_data["item"]["doc_id"], timestamp)
             print(meta_data["item"]["doc_id"], timestamp)
             del meta_data["item"]
-            request.replace(meta=meta_data)   # OK.
+            print(request.meta)
         except Exception as e:
             print("lxw_Exception. in middlewares.py: ", e)
 

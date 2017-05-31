@@ -12,7 +12,7 @@ from scrapy.conf import settings
 class CjodocidspiderPipeline(object):
     collection_name = "cjo_docid_0531"
 
-    def __init__(self, mongo_uri, mongo_port, mongo_db, redis_uri, redis_port, redis_key):
+    def __init__(self, mongo_uri, mongo_port, mongo_db):
         self.mongo_uri = mongo_uri
         self.mongo_port = mongo_port
         self.mongo_db = mongo_db

@@ -12,7 +12,8 @@ class CjodocidspiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     # abstract = scrapy.Field()  # 1.裁判要旨段原文
-    pass
+    doc_id = scrapy.Field()
+    case_details_json = scrapy.Field()
 
 
 class CjodocidMiddlewaresItem(scrapy.Item):
