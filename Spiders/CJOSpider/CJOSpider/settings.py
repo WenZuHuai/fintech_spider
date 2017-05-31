@@ -59,8 +59,8 @@ DOWNLOADER_MIDDLEWARES = {
 
     # Proxy
     # 'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110, # ScrapyDeprecationWarning
-    # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    # 'CJOSpider.middlewares.ProxyMiddleware': 100,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'CJOSpider.middlewares.ProxyMiddleware': 100,
 
     # PhantomJS
     # 'CJOSpider.middlewares.JavaScriptMiddleware': 543,
