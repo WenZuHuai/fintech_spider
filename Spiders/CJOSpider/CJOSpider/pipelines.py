@@ -11,7 +11,7 @@ from scrapy.conf import settings
 
 
 class CjospiderPipeline(object):
-    collection_name = "cjo0528"
+    collection_name = "cjo0531"
 
     def __init__(self, mongo_uri, mongo_port, mongo_db, redis_uri, redis_port, redis_key):
         self.mongo_uri = mongo_uri
@@ -45,9 +45,10 @@ class CjospiderPipeline(object):
 
     def process_item(self, item, spider):
         self.db[self.collection_name].insert(dict(item))
-        # self.redis_uri.rpush(self.redis_key, item.get("doc_id", "0"))
-        # self.redis_uri.zadd(self.redis_key, item.get("doc_id", "0"), 0)
-        self.redis_uri.hset(self.redis_key, item.get("doc_id", "0"), 0)
+
+        if not self.redis_uri.hexists(self.redis_key, item.get("doc_id", "0")):    # 如果不存在
+            self.redis_uri.hset(self.redis_key, item.get("doc_id", "0"), 0)
+
         """
         redis_key: DOC_ID_HASH
         0: 初始值, 未爬取

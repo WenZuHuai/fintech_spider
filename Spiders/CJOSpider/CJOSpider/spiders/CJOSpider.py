@@ -43,8 +43,8 @@ class CJOSpider(scrapy.Spider):
 
     DIGIT_DICT = {1: "01", 2: "02", 3: "03", 4: "04", 5: "05", 6: "06", 7: "07", 8: "08", 9: "09"}  # 月份, 只处理单个的数字即可
     # 日志记录哪些案例应该爬取，哪些案例爬取过了，从而推导出哪些没有爬取
-    should_output_logger = generate_output_logger("CJOSpiderOuputShould")
-    actual_output_logger = generate_output_logger("CJOSpiderOuputActual")
+    # should_output_logger = generate_output_logger("CJOSpiderOuputShould")
+    # actual_output_logger = generate_output_logger("CJOSpiderOuputActual")
     # 错误日志
     error_logger = generate_logger("CJOSpiderError")
     # 记录超过CRAWL_LIMIT的情况
@@ -163,7 +163,7 @@ class CJOSpider(scrapy.Spider):
 
         # name = json.dumps(data, ensure_ascii=False)   # utf-8
         name = json.dumps(data)  # unicode
-        print("into Redis, data: ", name)
+        # print("into Redis, data: ", name)
         self.REDIS_URI.hset(REDIS_KEY_TASKS, name, "0_0")
         """
         REDIS_KEY_TASKS: TASKS_HASH
@@ -176,7 +176,7 @@ class CJOSpider(scrapy.Spider):
         """
         先按序请求各个start_url， 然后才会进入到parse中(可能是异步处理的，当start_urls比较多时，可能先进入parse? 待确定, 内部实现细节和工作原理)
         """
-        print("data:", data)
+        print("in parse(). data:", data)
         text = response.text
         try:
             text_str = json.loads(text)

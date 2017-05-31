@@ -35,13 +35,12 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         # 当请求真正发出去时, 将TASKS_HASH中的数据修改为当前的时间戳
         # meta_data = copy.deepcopy(request.meta)
         meta_data = request.meta
-        print(meta_data["item"])
-        self.REDIS_URI.hset(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"], "{0}_{1}".format(int(meta_data["item"]["flag_code"])+1, int(time.time())))
-        print(self.REDIS_URI.hget(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"]))
+        # print(meta_data["item"])
+        flagcode_timestamp = "{0}_{1}".format(int(meta_data["item"]["flag_code"])+1, int(time.time()))
+        self.REDIS_URI.hset(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"], flagcode_timestamp)
+        print(self.REDIS_URI.hget(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"]), flagcode_timestamp)
         del meta_data["item"]
-        # print(request.meta)
         # request.replace(meta=meta_data)   # OK.
-        # print(request.meta)
 
     # the default user_agent_list composes chrome,I E,firefox,Mozilla,opera,netscape
     # for more user agent strings,you can find it in http://www.useragentstring.com/pages/useragentstring.php
