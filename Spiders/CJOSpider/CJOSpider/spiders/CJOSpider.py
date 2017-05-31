@@ -50,7 +50,7 @@ class CJOSpider(scrapy.Spider):
     # 记录超过CRAWL_LIMIT的情况
     exceed_crawl_limit_logger = generate_output_logger("CJOSpiderExceedCrawlLimit")
     REDIS_URI = get_redis_uri(REDIS_HOST, REDIS_PORT)
-    TIMEOUT = 50    # Proxy: request.meta['download_timeout'] = 120.0; request.meta['retry_times'] = 2; settings.py: RETRY_TIMES: 2(default)
+    TIMEOUT = 480   # Proxy: request.meta['download_timeout'] = 120.0; request.meta['retry_times'] = 2; settings.py: RETRY_TIMES: 2(default)
 
     def start_requests(self):
         """
