@@ -38,7 +38,7 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         # print(meta_data["item"])
         flagcode_timestamp = "{0}_{1}".format(int(meta_data["item"]["flag_code"])+1, int(time.time()))
         self.REDIS_URI.hset(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"], flagcode_timestamp)
-        print(self.REDIS_URI.hget(REDIS_KEY_TASKS, meta_data["item"]["data_dict_str"]), flagcode_timestamp)
+        print(meta_data["item"]["data_dict_str"], flagcode_timestamp)
         del meta_data["item"]
         # request.replace(meta=meta_data)   # OK.
 
