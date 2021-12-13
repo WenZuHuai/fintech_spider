@@ -19,7 +19,7 @@ ipython-genutils==0.2.0
 itsdangerous==0.24
 jedi==0.10.2
 Jinja2==2.9.6
-lxml==3.7.3
+lxml==4.6.5
 MarkupSafe==1.0
 matplotlib==2.0.1
 numpy==1.12.1
