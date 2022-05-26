@@ -51,7 +51,7 @@ simplegeneric==0.8.1
 six==1.10.0
 speedtest-cli==1.0.6
 traitlets==4.3.2
-Twisted==17.1.0
+Twisted==22.4.0
 w3lib==1.17.0
 wcwidth==0.1.7
 Werkzeug==0.12.1
