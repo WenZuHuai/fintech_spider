@@ -22,7 +22,7 @@ Jinja2==2.9.6
 lxml==3.7.3
 MarkupSafe==1.0
 matplotlib==2.0.1
-numpy==1.12.1
+numpy==1.22.0
 olefile==0.44
 packaging==16.8
 parsel==1.1.0
